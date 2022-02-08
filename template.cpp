@@ -42,8 +42,6 @@ int main(void){
         return 0;
 }
 
-template<typename T>
-using vec = std::vector<T>;
 template<class T,typename U>
 istream& operator >> (istream& is,pair<T,U>& p);
 template<class T>
@@ -79,6 +77,8 @@ ostream& operator << (ostream& os,mint& n){
         cout << n.val();
         return os;
 }
+template<typename T>
+using vec = std::vector<T>;
 using ll = int64_t;
 using ivec = vec<int>;
 using llvec = vec<ll>;
