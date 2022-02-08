@@ -1,0 +1,208 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = int64_t;
+
+// エラトステネスの篩
+void Prime(vector<bool> &prime){
+        int n=prime.size();
+        prime[0]=true;
+        prime[1]=true;
+
+        for(int i=0;i < sqrt(n);i++){
+                if(prime[i]==true){
+                        continue;
+                }
+
+                for(int j=2;j*i<n;j++){
+                        prime[j*i]=true;
+                }
+        }
+
+        return;
+}
+
+// Char to Int
+int ctoi(char c){
+        return c-'0';
+}
+
+// 素因数分解
+vector<pair<ll,ll>> prime_factorize(ll n){
+        vector<pair<ll,ll>> res;
+
+        for(ll i = 2;i*i <= n;++i){
+                if(n%i!=0){
+                        continue;
+                }
+
+                int cnt=0;
+
+                while(n%i==0){
+                        ++cnt;
+                        n/=i;
+                }
+
+                res.push_back(make_pair(i,cnt));
+        }
+
+        if(n!=1){
+                res.push_back(make_pair(n,1));
+        }
+
+        return res;
+}
+
+// 2つの配列の要素と要素の差で一番小さいものを返す
+// llvec x はソートされてる必要あり
+template<typename T> T min_diff(const vector<T> a,const vector<T> &x){
+        T num=INT_MAX/2;
+
+        for(auto&& v : a){
+                auto itr=lower_bound(all(x),v);
+
+                if(itr==x.begin()){
+                        num=min(num,(T)abs(v-*itr));
+                }else{
+                        num=min(num,(T)abs(v-*itr));
+                        --itr;
+                        num=min(num,(T)abs(v-*itr));
+                }
+        }
+
+        return num;
+}
+
+// 中央値
+template<typename T>T median(const vector<T> &v){
+        T res;
+        size_t cnt=v.size();
+        if(cnt%2==0){
+                res=(v.at(cnt/2-1)+v.at(cnt/2))/2;
+        }else{
+                res=v.at(cnt/2);
+        }
+
+        return res;
+}
+
+// Union-Find
+class UnionFind{
+        private :
+                vector<int> par,rank,cnt;
+                int siz;
+
+        public :
+                UnionFind(size_t n):par(n),rank(n),cnt(n,1),siz(n){
+                        for(int i=0;i < n;++i){
+                                par.at(i)=i;
+                        }
+                }
+
+                size_t root(size_t a){
+                        if(par.at(a)==a){
+                                return a;
+                        }else{
+                                par.at(a)=root(par.at(a));
+                                return par.at(a);
+                        }
+                }
+
+                bool same(size_t a,size_t b){
+                        return root(a)==root(b);
+                }
+
+                void unite(size_t a,size_t b){
+                        a=root(a);
+                        b=root(b);
+
+                        if(a!=b){
+                                if(rank.at(a) < rank.at(b))swap(a,b);
+
+                                par.at(b)=a;
+
+                                if(rank.at(a)==rank.at(b))++rank.at(a);
+
+                                cnt.at(a)+=cnt.at(b);
+
+                                --siz;
+                        }
+                }
+
+                int size(size_t a){
+                        return cnt.at(root(a));
+                }
+
+                int size(){
+                        return siz;
+                }
+};
+
+// にぶたん
+template<typename T>
+T nibutan(T left ,T right, T target, function<T(T)> func,
+                function<bool(T,T)> equal = [](T left, T right){return left==right;},
+                function<bool(T,T)> compare = [](T res, T target){return res <= target;}){
+        T mid = (right+left)/2;
+        T res = func(mid);
+
+        while(!equal(left,right)){
+                if(compare(res,target)){
+                        left = mid;
+                }else{
+                        right = mid;
+                }
+
+                mid = (right+left)/2;
+                res = func(mid);
+        }
+
+        return left;
+}
+
+// 累積和
+template<typename T>
+class ruisekiwa {
+        public :
+                ruisekiwa(vector<T>& a){
+                        v.resize(a.size()+1);
+
+                        for(int i=1;i < v.size();++i){
+                                v[i] = v[i-1]+a[i-1];
+                        }
+                }
+
+                template<typename U,class V>
+                ruisekiwa(vector<U>& a,V func){
+                        v.resize(a.size()+1);
+
+                        for(int i=1;i < v.size();++i){
+                                if(func(a[i-1])){
+                                        v[i]=v[i-1]+1;
+                                }else{
+                                        v[i]=v[i-1];
+                                }
+                        }
+                }
+
+                T range(size_t l,size_t r) const{
+                        return v[r]-v[l];
+                }
+
+        private :
+                vector<T> v;
+};
+
+template<typename T>
+vector<pair<T,int>> run_length_encoding (vector<T>& v){
+        vector<pair<T,int>> rle;
+
+        for(int i=0;i < v.size();++i){
+                if(rle.back().first == v[i]){
+                        ++rle.back().second;
+                }else{
+                        rle.push_back({v[i],0});
+                }
+        }
+
+        return rle;
+}
