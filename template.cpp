@@ -88,9 +88,10 @@ using bvec = vec<bool>;
 using cvec = vec<char>;
 using str = std::string;
 using svec = vec<str>;
-using ipair = pair<int,int>;
-using llpair = pair<ll,ll>;
-using ipvec = vec<ipair>;
+using iip = pair<int,int>;
+using llp = pair<ll,ll>;
+using iipvec = vec<iip>;
+using llpvec = vec<llp>;
 using bit = bitset<63>;
 void yorn(bool flag){
         cout << (flag ? "Yes" : "No") << endl;
