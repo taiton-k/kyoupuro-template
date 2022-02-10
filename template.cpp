@@ -93,6 +93,14 @@ using llp = pair<ll,ll>;
 using iipvec = vec<iip>;
 using llpvec = vec<llp>;
 using bit = bitset<63>;
+void Yes(){
+        cout << "Yes" << endl;
+        return;
+}
+void No(){
+        cout << "No" << endl;
+        return;
+}
 void yorn(bool flag){
         cout << (flag ? "Yes" : "No") << endl;
 }
