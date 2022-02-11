@@ -92,7 +92,8 @@ using iip = pair<int,int>;
 using llp = pair<ll,ll>;
 using iipvec = vec<iip>;
 using llpvec = vec<llp>;
-using bit = bitset<63>;
+using ivec2 = vec<ivec>;
+using iset = set<int>;
 void Yes(){
         cout << "Yes" << endl;
         return;
