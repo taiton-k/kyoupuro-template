@@ -94,11 +94,11 @@ using iipvec = vec<iip>;
 using llpvec = vec<llp>;
 using ivec2 = vec<ivec>;
 using iset = set<int>;
-void Yes(){
+void yes(){
         cout << "Yes" << endl;
         return;
 }
-void No(){
+void no(){
         cout << "No" << endl;
         return;
 }
@@ -111,3 +111,6 @@ void yorn(bool flag){
 void salve(void){
 
 }
+
+/* 考察スペース
+*/
