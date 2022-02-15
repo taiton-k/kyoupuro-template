@@ -111,6 +111,3 @@ void yorn(bool flag){
 void salve(void){
 
 }
-
-/* 考察スペース
-*/
