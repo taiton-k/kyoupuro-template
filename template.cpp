@@ -38,8 +38,9 @@ using uf_tree = disjoint_sets_with_storage<>;
 #include <boost/graph/graph_utility.hpp>
 //#include <boost/graph/depth_first_search.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
+//#include <boost/graph/bellman_ford_shortest_paths.hpp>
 
-using Graph = adjacency_list< vecS, vecS, undirectedS, no_property , property<edge_weight_t,int> >;
+using Graph = adjacency_list<vecS,vecS,directedS,no_property,property<edge_weight_t,int64_t>>;
 using Vertex = graph_traits<Graph>::vertex_descriptor;
 
 #endif
