@@ -11,19 +11,38 @@ using namespace assign;
 
 #include <boost/range/algorithm.hpp>
 
-/*
+//#define USE_MULTIPRECISION
+#ifdef USE_MULTIPRECISION
+
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+
 using namespace multiprecision;
 using cint = cpp_int;
 using lfloat = cpp_dec_float_50;
-*/
 
-//#include <boost/pending/disjoint_sets.hpp>
-//using uf_tree = disjoint_sets_with_storage<>;
+#endif
 
-//#include <boost/graph/adjacency_list.hpp>
-//#include <boost/graph/graph_utility.hpp>
+//#define USE_DISJOINT_SETS
+#ifdef USE_DISJOINT_SETS
+
+#include <boost/pending/disjoint_sets.hpp>
+using uf_tree = disjoint_sets_with_storage<>;
+
+#endif
+
+//#define USE_BGL
+#ifdef USE_BGL
+
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_utility.hpp>
+//#include <boost/graph/depth_first_search.hpp>
+#include <boost/graph/dijkstra_shortest_paths.hpp>
+
+using Graph = adjacency_list< vecS, vecS, undirectedS, no_property , property<edge_weight_t,int> >;
+using Vertex = graph_traits<Graph>::vertex_descriptor;
+
+#endif
 
 #include <atcoder/modint>
 #include <atcoder/math>
@@ -105,6 +124,7 @@ void no(){
 void yorn(bool flag){
         cout << (flag ? "Yes" : "No") << endl;
 }
+
 
 
 
