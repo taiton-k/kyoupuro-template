@@ -4,9 +4,10 @@ using ll = int64_t;
 
 // エラトステネスの篩
 void Prime(vector<bool> &prime){
+        fill(prime.begin(),prime.end(),true);
         int n=prime.size();
-        prime[0]=true;
-        prime[1]=true;
+        prime[0]=false;
+        prime[1]=false;
 
         for(int i=0;i < sqrt(n);i++){
                 if(prime[i]==true){
@@ -14,7 +15,7 @@ void Prime(vector<bool> &prime){
                 }
 
                 for(int j=2;j*i<n;j++){
-                        prime[j*i]=true;
+                        prime[j*i]=false;
                 }
         }
 
@@ -140,7 +141,7 @@ class UnionFind{
 // にぶたん
 template<typename T>
 T nibutan(T left ,T right, T target, function<T(T)> func,
-                function<bool(T,T)> equal = [](T left, T right){return left==right;},
+                function<bool(T,T)> equal = [](T left, T right){return right-left == 1;},
                 function<bool(T,T)> compare = [](T res, T target){return res <= target;}){
         T mid = (right+left)/2;
         T res = func(mid);
@@ -192,6 +193,7 @@ class ruisekiwa {
                 vector<T> v;
 };
 
+// ランレングス圧縮
 template<typename T>
 vector<pair<T,int>> run_length_encoding (vector<T>& v){
         vector<pair<T,int>> rle;

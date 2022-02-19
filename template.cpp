@@ -23,21 +23,13 @@ using lfloat = cpp_dec_float_50;
 
 #endif
 
-//#define USE_DISJOINT_SETS
-#ifdef USE_DISJOINT_SETS
-
-#include <boost/pending/disjoint_sets.hpp>
-using uf_tree = disjoint_sets_with_storage<>;
-
-#endif
-
 //#define USE_BGL
 #ifdef USE_BGL
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_utility.hpp>
 //#include <boost/graph/depth_first_search.hpp>
-#include <boost/graph/dijkstra_shortest_paths.hpp>
+//#include <boost/graph/dijkstra_shortest_paths.hpp>
 //#include <boost/graph/bellman_ford_shortest_paths.hpp>
 
 using Graph = adjacency_list<vecS,vecS,directedS,no_property,property<edge_weight_t,int64_t>>;
@@ -47,6 +39,7 @@ using Vertex = graph_traits<Graph>::vertex_descriptor;
 
 #include <atcoder/modint>
 #include <atcoder/math>
+#include <atcoder/dsu>
 //#include <atcoder/segtree>
 using namespace::atcoder;
 using mint = modint1000000007;
@@ -125,7 +118,6 @@ void no(){
 void yorn(bool flag){
         cout << (flag ? "Yes" : "No") << endl;
 }
-
 
 
 
