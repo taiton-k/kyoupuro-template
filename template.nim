@@ -21,6 +21,7 @@ proc `++`(n:var int):void=
 proc `--`(n:var int):void=
   n-=1
 
-proc getLine():sec[int] = return stdin.readLine.split.map parseInt
-proc getInt():int = return stdin.readLine.parseInt
-
+proc getLine():seq[int] =
+  return stdin.readLine.split.map parseInt
+proc getInt():int =
+  return stdin.readLine.parseInt
