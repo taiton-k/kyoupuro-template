@@ -63,9 +63,16 @@ template<class T>
 ostream& operator << (ostream& os,vector<T>& arr);
 ostream& operator << (ostream& os,mint& n);
 template<class T,typename U>
+ostream& operator << (ostream& os,pair<T,U>& p);
+template<class T,typename U>
 istream& operator >> (istream& is,pair<T,U>& p){
         cin >> p.first >> p.second;
         return is;
+}
+template<class T,typename U>
+ostream& operator << (ostream& os,pair<T,U>& p){
+        cout << p.first << ' ' << p.second;
+        return os;
 }
 template<class T>
 istream& operator >> (istream& is,vector<T>& arr){
@@ -109,10 +116,12 @@ using ivec2 = vec<ivec>;
 using iset = set<int>;
 void yes(){
         cout << "Yes" << endl;
+        exit(0);
         return;
 }
 void no(){
         cout << "No" << endl;
+        exit(0);
         return;
 }
 void yorn(bool flag){
