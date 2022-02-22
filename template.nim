@@ -11,9 +11,9 @@ import hashes
 import intsets
 import sets
 
-const usingCppFeat = false
+const useCppFeat = false
 
-when usingCppFeat:
+when useCppFeat:
         {.passc:"-std=gnu++17 -Wall -Wextra -O2 -DONLINE_JUDGE -I/opt/boost/gcc/include -L/opt/boost/gcc/lib -I/opt/ac-library".}
 
         type dsu {.header:"<atcoder/dsu>",importcpp:"atcoder::dsu".} = object
@@ -23,6 +23,8 @@ when usingCppFeat:
 
         type mint {.header:"<atcoder/modint>",importcpp:"atcoder::modint1000000007".} = object
         proc val(a:mint):int {.importcpp:"#.val()"}
+else:
+        {.passc:"-Wall -Wextra -Ofast -DONLINE_JUDGE"}
 
 proc yorn(flag:bool):void=
         echo if flag: "Yes" else: "No"
@@ -39,6 +41,8 @@ proc getLine():seq[int] =
         return stdin.readLine.split.map parseInt
 proc getInt():int =
         return stdin.readLine.parseInt
+proc print(a: varargs[string, `$`]):void =
+        stdout.write(a)
 
 proc main():void
 main()
