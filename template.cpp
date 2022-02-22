@@ -57,13 +57,12 @@ int main(void){
 
 template<class T,typename U>
 istream& operator >> (istream& is,pair<T,U>& p);
-template<class T>
-istream& operator >> (istream& is,vector<T>& arr);
-template<class T>
-ostream& operator << (ostream& os,vector<T>& arr);
-ostream& operator << (ostream& os,mint& n);
+
 template<class T,typename U>
 ostream& operator << (ostream& os,pair<T,U>& p);
+
+ostream& operator << (ostream& os,mint& n);
+
 template<class T,typename U>
 istream& operator >> (istream& is,pair<T,U>& p){
         cin >> p.first >> p.second;
@@ -114,6 +113,7 @@ using iipvec = vec<iip>;
 using llpvec = vec<llp>;
 using ivec2 = vec<ivec>;
 using iset = set<int>;
+using ideq = deque<int>;
 void yes(){
         cout << "Yes" << endl;
         exit(0);
