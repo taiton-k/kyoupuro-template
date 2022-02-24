@@ -37,15 +37,29 @@ proc `++`(n:var int):void=
 proc `--`(n:var int):void=
         n-=1
 
-proc getLine():seq[int] =
-        return stdin.readLine.split.map parseInt
-proc getInt():int =
-        return stdin.readLine.parseInt
+type point = seq[int]
+proc newPoint():seq[int] = newSeq[int](2)
+proc x(p:point):int = p[0]
+proc y(p:point):int = p[1]
+proc a(p:point):int = p[0]
+proc b(p:point):int = p[1]
+proc `-`(p:point,q:point):point= @[p.x-q.x,p.y-q.y]
+proc `-=`(p:var point,q:point):void=
+        p = p-q
+proc dist(p:point,q:point):float =
+        var p=p
+        var q=q
+        q-=p
+        return sqrt(float(q.x * q.x)+float(q.y * q.y))
+
+proc getLine():seq[int] = stdin.readLine.split.map parseInt
+proc getInt():int = stdin.readLine.parseInt
 proc print(a: varargs[string, `$`]):void =
         stdout.write(a)
 
 proc main():void
 main()
+
 
 
 
