@@ -59,7 +59,7 @@ let cin:istream = istream()
 proc `>>`(ist:istream,s:var string):istream {.discardable.} =
         var t:string
         var c:char = getc()
-        while c == ' ':
+        while c == ' ' or c == '\n':
                 c = getc()
         while c != ' ' and c != '\n':
                 t.add(c)
@@ -70,6 +70,11 @@ proc `>>`(ist:istream,n:var int):istream {.discardable.} =
         var s:string
         ist >> s
         n = parseInt(s)
+        return ist
+proc `>>`(ist:istream,n:var float):istream {.discardable.} =
+        var s:string
+        ist >> s
+        n = parseFloat(s)
         return ist
 proc `>>`[T](ist:istream,a:var openArray[T]):istream {.discardable.} =
         for i,_ in pairs(a):
