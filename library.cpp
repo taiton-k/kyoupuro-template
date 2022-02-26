@@ -139,12 +139,12 @@ class UnionFind{
 };
 
 // にぶたん
-template<typename T>
-T nibutan(T left ,T right, T target, function<T(T)> func,
+template<typename T,typename U>
+T nibutan(T left ,T right, U target, function<U(T)> func,
                 function<bool(T,T)> equal = [](T left, T right){return right-left == 1;},
-                function<bool(T,T)> compare = [](T res, T target){return res <= target;}){
+                function<bool(U,U)> compare = [](U res, U target){return res <= target;}){
         T mid = (right+left)/2;
-        T res = func(mid);
+        U res = func(mid);
 
         while(!equal(left,right)){
                 if(compare(res,target)){
