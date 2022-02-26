@@ -122,6 +122,8 @@ using ideq = deque<int>;
 using edge = std::array<int,3>;
 using graph = vec<ivec>;
 
+constexpr char space = ' ';
+
 void yes(){
         cout << "Yes" << endl;
         exit(0);
