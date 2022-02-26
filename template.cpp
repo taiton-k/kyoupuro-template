@@ -43,6 +43,7 @@ using Vertex = graph_traits<Graph>::vertex_descriptor;
 //#include <atcoder/segtree>
 using namespace::atcoder;
 using mint = modint1000000007;
+using mint2 = modint998244353;
 
 #define fore(p,arr) for(auto&& p : arr)
 #define rep(i,n) for(int i=0;i < static_cast<int>(n);++i)
@@ -61,7 +62,8 @@ istream& operator >> (istream& is,pair<T,U>& p);
 template<class T,typename U>
 ostream& operator << (ostream& os,pair<T,U>& p);
 
-ostream& operator << (ostream& os,mint& n);
+template<int Mod>
+ostream& operator << (ostream& os,static_modint<Mod>& n);
 
 template<class T,typename U>
 istream& operator >> (istream& is,pair<T,U>& p){
@@ -92,7 +94,8 @@ ostream& operator << (ostream& os,vector<T>& arr){
         cout << endl;
         return os;
 }
-ostream& operator << (ostream& os,mint& n){
+template<int Mod>
+ostream& operator << (ostream& os,atcoder::static_modint<Mod>& n){
         cout << n.val();
         return os;
 }
@@ -114,6 +117,9 @@ using llpvec = vec<llp>;
 using ivec2 = vec<ivec>;
 using iset = set<int>;
 using ideq = deque<int>;
+using edge = std::array<int,3>;
+using graph = vec<ivec>;
+
 void yes(){
         cout << "Yes" << endl;
         exit(0);

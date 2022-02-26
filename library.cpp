@@ -208,3 +208,17 @@ vector<pair<T,int>> run_length_encoding (vector<T>& v){
 
         return rle;
 }
+
+// 自作比較クラス
+template<typename T,size_t I>
+struct greaterAt{
+        bool operator () (T left,T right){
+                return left[I] < right[I];
+        }
+};
+template<typename T,size_t I>
+struct lessAt{
+        bool operator () (T left,T right){
+                return left[I] > right[I];
+        }
+};
