@@ -102,12 +102,14 @@ ostream& operator << (ostream& os,atcoder::static_modint<Mod>& n){
 template<typename T>
 using vec = std::vector<T>;
 using ll = int64_t;
+using ld = long double;
 using ivec = vec<int>;
 using llvec = vec<ll>;
 using fvec = vec<float>;
 using dvec = vec<double>;
 using bvec = vec<bool>;
 using cvec = vec<char>;
+using ldvec = vec<long double>;
 using str = std::string;
 using svec = vec<str>;
 using iip = pair<int,int>;
@@ -133,6 +135,7 @@ void no(){
 void yorn(bool flag){
         cout << (flag ? "Yes" : "No") << endl;
 }
+
 
 
 
