@@ -48,6 +48,7 @@ using mint2 = modint998244353;
 #define fore(p,arr) for(auto&& p : arr)
 #define rep(i,n) for(int i=0;i < static_cast<int>(n);++i)
 #define reps(i,a,n) for(int i=a;i < static_cast<int>(n);++i)
+#define endl '\n'
 
 void salve();
 int main(void){
