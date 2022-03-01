@@ -222,3 +222,27 @@ struct lessAt{
                 return left[I] > right[I];
         }
 };
+
+// トポロジカルソート
+void topological_sort(vector<vector<int>>& g,vector<int>& in,vector<int>& ans){
+        priority_queue<int,vector<int>,greater<>> que;
+
+        for(int i=0;i < static_cast<int>(in.size());++i){
+                if(in[i]==0){
+                        que.push(i);
+                }
+        }
+
+        while(!que.empty()){
+                int v = que.top();
+                ans.push_back(v+1);
+                que.pop();
+
+                for(int& e : g[v]){
+                        --in[e];
+                        if(in[e]==0){
+                                que.push(e);
+                        }
+                }
+        }
+}
