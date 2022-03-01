@@ -54,6 +54,7 @@ void salve();
 int main(void){
         cin.tie(nullptr),ios::sync_with_stdio(false),cout << fixed << setprecision(12);
         salve();
+        cout << flush;
         return 0;
 }
 
@@ -104,6 +105,7 @@ template<typename T>
 using vec = std::vector<T>;
 using ll = int64_t;
 using ld = long double;
+using uint = unsigned int;
 using ivec = vec<int>;
 using llvec = vec<ll>;
 using fvec = vec<float>;
