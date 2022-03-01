@@ -54,9 +54,9 @@ proc dist(p:point,q:point):float =
 proc getc():char {.header:"<cstdio>" importcpp:"getchar_unlocked()".}
 proc ungetc(c:char):void {.importcpp:"ungetc(@, stdin)".}
 const endl:char = '\n'
-type istream = object
-let cin:istream = istream()
-proc `>>`(ist:istream,s:var string):istream {.discardable.} =
+type inputter = object
+let cin:inputter = inputter()
+proc `>>`(ist:inputter,s:var string):inputter {.discardable.} =
         var t:string
         var c:char = getc()
         while c == ' ' or c == '\n':
@@ -66,37 +66,37 @@ proc `>>`(ist:istream,s:var string):istream {.discardable.} =
                 c = getc()
         ungetc(c)
         s = t
-proc `>>`(ist:istream,n:var int):istream {.discardable.} =
+proc `>>`(ist:inputter,n:var int):inputter {.discardable.} =
         var s:string
         ist >> s
         n = parseInt(s)
         return ist
-proc `>>`(ist:istream,n:var float):istream {.discardable.} =
+proc `>>`(ist:inputter,n:var float):inputter {.discardable.} =
         var s:string
         ist >> s
         n = parseFloat(s)
         return ist
-proc `>>`[T](ist:istream,a:var openArray[T]):istream {.discardable.} =
+proc `>>`[T](ist:inputter,a:var openArray[T]):inputter {.discardable.} =
         for i,_ in pairs(a):
                 ist >> a[i]
 
-type ostream = object
+type outputter = object
         f : File
-proc `<<`(ost:ostream,a:string or int or float or char):ostream {.discardable.} =
+proc `<<`(ost:outputter,a:string or int or float or char):outputter {.discardable.} =
         ost.f.write($a)
         return ost
-proc `<<`[T](ost:ostream,a:openArray[T]):ostream {.discardable.} =
+proc `<<`[T](ost:outputter,a:openArray[T]):outputter {.discardable.} =
         for i in a:
                 ost << i
         ost << endl
         return ost
-proc `<<`(ost:ostream,p:proc(f:File)):ostream {.discardable.}=
+proc `<<`(ost:outputter,p:proc(f:File)):outputter {.discardable.}=
         p(ost.f)
         return ost
 proc flush(f:File):void=
         f.flushFile()
-let cout:ostream = ostream(f:stdout)
-let cerr:ostream = ostream(f:stderr)
+let cout:outputter = outputter(f:stdout)
+let cerr:outputter = outputter(f:stderr)
 
 proc main():void
 main()
