@@ -9,8 +9,7 @@
 using namespace std;
 
 #include <boost/assign.hpp>
-using namespace boost;
-using namespace assign;
+using namespace boost::assign;
 
 #include <boost/range/algorithm.hpp>
 
@@ -20,7 +19,7 @@ using namespace assign;
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
-using namespace multiprecision;
+using namespace boost::multiprecision;
 using cint = cpp_int;
 using lfloat = cpp_dec_float_50;
 
@@ -37,6 +36,19 @@ using lfloat = cpp_dec_float_50;
 
 using Graph = adjacency_list<vecS,vecS,directedS,no_property,property<edge_weight_t,int64_t>>;
 using Vertex = graph_traits<Graph>::vertex_descriptor;
+
+#endif
+
+//#define USE_GEOMETRY
+#ifdef USE_GEOMETRY
+
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/linestring.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+
+namespace boost::geometry;
+using point = model::d2::point_xy<long double>;
+using line = model::linestring<point>;
 
 #endif
 
@@ -93,7 +105,17 @@ int main(void){
         return 0;
 }
 
-class swallow{};
+void input(str&);
+void input(char&);
+void input(int&);
+void input(ll&);
+void input(float&);
+void input(double&);
+void input(ld&);
+template<typename T,typename U>void input(pair<T,U>&);
+template<typename T>void input(vec<T>&);
+template<typename T>void input(deq<T>&);
+template<typename... Args>void input(Args&...);
 
 void input(str& s){
         int c = getchar_unlocked();
@@ -156,8 +178,16 @@ void input(pair<T,U>& p){
 }
 template<typename... Args>
 void input(Args&... args){
-        void(swallow{input(args)...});
+        void(initializer_list<int>{(input(args),0)...});
 }
+
+template<typename T>void print(const T&);
+template<typename T>void print(const vec<T>&);
+template<typename T>void print(const deq<T>&);
+template<typename T>void print(const set<T>&);
+template<typename T>void print(const mset<T>&);
+template<typename T>void print(const vec<vec<T>>&);
+template<typename... Args>void print(const Args&...);
 
 template<typename T>
 void print(const T& a){
@@ -204,7 +234,7 @@ void print(const vec<vec<T>>& a){
 
 template<typename... Args>
 void print(const Args&... args){
-        void(swallow{print(args)...});
+        void(initializer_list<int>{(print(args),0)...});
 }
 
 
