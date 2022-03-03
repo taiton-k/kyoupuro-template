@@ -13,45 +13,6 @@ using namespace boost::assign;
 
 #include <boost/range/algorithm.hpp>
 
-//#define USE_MULTIPRECISION
-#ifdef USE_MULTIPRECISION
-
-#include <boost/multiprecision/cpp_int.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
-using namespace boost::multiprecision;
-using cint = cpp_int;
-using lfloat = cpp_dec_float_50;
-
-#endif
-
-//#define USE_BGL
-#ifdef USE_BGL
-
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/graph_utility.hpp>
-//#include <boost/graph/depth_first_search.hpp>
-//#include <boost/graph/dijkstra_shortest_paths.hpp>
-//#include <boost/graph/bellman_ford_shortest_paths.hpp>
-
-using Graph = adjacency_list<vecS,vecS,directedS,no_property,property<edge_weight_t,int64_t>>;
-using Vertex = graph_traits<Graph>::vertex_descriptor;
-
-#endif
-
-//#define USE_GEOMETRY
-#ifdef USE_GEOMETRY
-
-#include <boost/geometry.hpp>
-#include <boost/geometry/geometries/linestring.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-
-namespace boost::geometry;
-using point = model::d2::point_xy<long double>;
-using line = model::linestring<point>;
-
-#endif
-
 #include <atcoder/modint>
 #include <atcoder/math>
 #include <atcoder/dsu>
@@ -59,6 +20,10 @@ using line = model::linestring<point>;
 using namespace::atcoder;
 using mint = modint1000000007;
 using mint2 = modint998244353;
+
+//#define USE_MULTIPRECISION
+//#define USE_BGL
+//#define USE_GEOMETRY
 
 #define rep_overload(i,n,m, REP, ...) REP
 #define rep_1(i,n) for(int i=0;i < static_cast<int>(n);++i)
@@ -105,19 +70,19 @@ int main(void){
         return 0;
 }
 
-void input(str&);
-void input(char&);
-void input(int&);
-void input(ll&);
-void input(float&);
-void input(double&);
-void input(ld&);
-template<typename T,typename U>void input(pair<T,U>&);
-template<typename T>void input(vec<T>&);
-template<typename T>void input(deq<T>&);
-template<typename... Args>void input(Args&...);
+void input(str&) noexcept;
+void input(char&) noexcept;
+void input(int&) noexcept;
+void input(ll&) noexcept;
+void input(float&) noexcept;
+void input(double&) noexcept;
+void input(ld&) noexcept;
+template<typename T,typename U>void input(pair<T,U>&) noexcept;
+template<typename T>void input(vec<T>&) noexcept;
+template<typename T>void input(deq<T>&) noexcept;
+template<typename... Args>void input(Args&...) noexcept;
 
-void input(str& s){
+void input(str& s) noexcept {
         int c = getchar_unlocked();
 
         while(c == ' ' or c == '\n'){
@@ -129,101 +94,101 @@ void input(str& s){
 
         ungetc(c,stdin);
 }
-void input(char& c){
+void input(char& c) noexcept {
         c = getchar_unlocked();
         while(c == ' ' or c == '\n'){
                 c = getchar_unlocked();
         }
 }
-void input(int& x){
+void input(int& x) noexcept {
         str s;
         input(s);
         x = stoi(s);
 }
-void input(ll& x){
+void input(ll& x) noexcept {
         str s;
         input(s);
         x = stoll(s);
 }
-void input(float& x){
+void input(float& x) noexcept {
         str s;
         input(s);
         x = stof(s);
 }
-void input(double& x){
+void input(double& x) noexcept {
         str s;
         input(s);
         x = stod(s);
 }
-void input(ld& x){
+void input(ld& x) noexcept {
         str s;
         input(s);
         x = stold(s);
 }
 template<typename T>
-void input(vec<T>& a){
+void input(vec<T>& a) noexcept {
         fore(i,a){
                 input(i);
         }
 }
 template<typename T>
-void input(deq<T>& a){
+void input(deq<T>& a) noexcept {
         fore(i,a){
                 input(i);
         }
 }
 template<typename T,typename U>
-void input(pair<T,U>& p){
+void input(pair<T,U>& p) noexcept {
         input(p.first,p.second);
 }
 template<typename... Args>
-void input(Args&... args){
+void input(Args&... args) noexcept {
         void(initializer_list<int>{(input(args),0)...});
 }
 
-template<typename T>void print(const T&);
-template<typename T>void print(const vec<T>&);
-template<typename T>void print(const deq<T>&);
-template<typename T>void print(const set<T>&);
-template<typename T>void print(const mset<T>&);
-template<typename T>void print(const vec<vec<T>>&);
-template<typename... Args>void print(const Args&...);
+template<typename T>void print(const T&) noexcept;
+template<typename T>void print(const vec<T>&) noexcept;
+template<typename T>void print(const deq<T>&) noexcept;
+template<typename T>void print(const set<T>&) noexcept;
+template<typename T>void print(const mset<T>&) noexcept;
+template<typename T>void print(const vec<vec<T>>&) noexcept;
+template<typename... Args>void print(const Args&...) noexcept;
 
 template<typename T>
-void print(const T& a){
+void print(const T& a) noexcept {
         cout << a;
 }
 
 template<typename T>
-void print(const vec<T>& a){
+void print(const vec<T>& a) noexcept {
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const deq<T>& a){
+void print(const deq<T>& a) noexcept {
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const set<T>& a){
+void print(const set<T>& a) noexcept {
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const mset<T>& a){
+void print(const mset<T>& a) noexcept {
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const vec<vec<T>>& a){
+void print(const vec<vec<T>>& a) noexcept {
         fore(i,a){
                 fore(j,i){
                         print(j,spc);
@@ -233,24 +198,75 @@ void print(const vec<vec<T>>& a){
 }
 
 template<typename... Args>
-void print(const Args&... args){
+void print(const Args&... args) noexcept {
         void(initializer_list<int>{(print(args),0)...});
 }
 
-
-void yes(){
+void yes() noexcept {
         cout << "Yes" << endl;
         exit(0);
         return;
 }
-void no(){
+void no() noexcept {
         cout << "No" << endl;
         exit(0);
         return;
 }
-void yorn(bool flag){
+void yorn(bool flag) noexcept {
         cout << (flag ? "Yes" : "No") << endl;
 }
+
+
+#ifdef USE_MULTIPRECISION
+
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
+using namespace boost::multiprecision;
+using cint = cpp_int;
+using lfloat = cpp_dec_float_50;
+
+void input(cint x) noexcept {
+        str s;
+        inpiut(s);
+
+        x.assign(s);
+}
+
+void input(cint x) noexcept {
+        str s;
+        inpiut(s);
+
+        x.assign(s);
+}
+
+#endif
+
+#ifdef USE_BGL
+
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_utility.hpp>
+//#include <boost/graph/depth_first_search.hpp>
+//#include <boost/graph/dijkstra_shortest_paths.hpp>
+//#include <boost/graph/bellman_ford_shortest_paths.hpp>
+
+using Graph = adjacency_list<vecS,vecS,directedS,no_property,property<edge_weight_t,int64_t>>;
+using Vertex = graph_traits<Graph>::vertex_descriptor;
+
+#endif
+
+#ifdef USE_GEOMETRY
+
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/linestring.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+
+namespace boost::geometry;
+using point = model::d2::point_xy<long double>;
+using line = model::linestring<point>;
+
+#endif
+
 
 
 
