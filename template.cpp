@@ -9,6 +9,7 @@
 using namespace std;
 
 #include <boost/assign.hpp>
+using namespace boost;
 using namespace boost::assign;
 
 #include <boost/range/algorithm.hpp>
@@ -70,19 +71,19 @@ int main(void){
         return 0;
 }
 
-void input(str&) noexcept;
-void input(char&) noexcept;
-void input(int&) noexcept;
-void input(ll&) noexcept;
-void input(float&) noexcept;
-void input(double&) noexcept;
-void input(ld&) noexcept;
-template<typename T,typename U>void input(pair<T,U>&) noexcept;
-template<typename T>void input(vec<T>&) noexcept;
-template<typename T>void input(deq<T>&) noexcept;
-template<typename... Args>void input(Args&...) noexcept;
+void input(str&);
+void input(char&);
+void input(int&);
+void input(ll&);
+void input(float&);
+void input(double&);
+void input(ld&);
+template<typename T,typename U>void input(pair<T,U>&);
+template<typename T>void input(vec<T>&);
+template<typename T>void input(deq<T>&);
+template<typename... Args>void input(Args&...);
 
-void input(str& s) noexcept {
+void input(str& s){
         int c = getchar_unlocked();
 
         while(c == ' ' or c == '\n'){
@@ -94,101 +95,101 @@ void input(str& s) noexcept {
 
         ungetc(c,stdin);
 }
-void input(char& c) noexcept {
+void input(char& c){
         c = getchar_unlocked();
         while(c == ' ' or c == '\n'){
                 c = getchar_unlocked();
         }
 }
-void input(int& x) noexcept {
+void input(int& x){
         str s;
         input(s);
         x = stoi(s);
 }
-void input(ll& x) noexcept {
+void input(ll& x){
         str s;
         input(s);
         x = stoll(s);
 }
-void input(float& x) noexcept {
+void input(float& x){
         str s;
         input(s);
         x = stof(s);
 }
-void input(double& x) noexcept {
+void input(double& x){
         str s;
         input(s);
         x = stod(s);
 }
-void input(ld& x) noexcept {
+void input(ld& x){
         str s;
         input(s);
         x = stold(s);
 }
 template<typename T>
-void input(vec<T>& a) noexcept {
+void input(vec<T>& a){
         fore(i,a){
                 input(i);
         }
 }
 template<typename T>
-void input(deq<T>& a) noexcept {
+void input(deq<T>& a){
         fore(i,a){
                 input(i);
         }
 }
 template<typename T,typename U>
-void input(pair<T,U>& p) noexcept {
+void input(pair<T,U>& p){
         input(p.first,p.second);
 }
 template<typename... Args>
-void input(Args&... args) noexcept {
+void input(Args&... args){
         void(initializer_list<int>{(input(args),0)...});
 }
 
-template<typename T>void print(const T&) noexcept;
-template<typename T>void print(const vec<T>&) noexcept;
-template<typename T>void print(const deq<T>&) noexcept;
-template<typename T>void print(const set<T>&) noexcept;
-template<typename T>void print(const mset<T>&) noexcept;
-template<typename T>void print(const vec<vec<T>>&) noexcept;
-template<typename... Args>void print(const Args&...) noexcept;
+template<typename T>void print(const T&);
+template<typename T>void print(const vec<T>&);
+template<typename T>void print(const deq<T>&);
+template<typename T>void print(const set<T>&);
+template<typename T>void print(const mset<T>&);
+template<typename T>void print(const vec<vec<T>>&);
+template<typename... Args>void print(const Args&...);
 
 template<typename T>
-void print(const T& a) noexcept {
+void print(const T& a){
         cout << a;
 }
 
 template<typename T>
-void print(const vec<T>& a) noexcept {
+void print(const vec<T>& a){
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const deq<T>& a) noexcept {
+void print(const deq<T>& a){
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const set<T>& a) noexcept {
+void print(const set<T>& a){
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const mset<T>& a) noexcept {
+void print(const mset<T>& a){
         fore(i,a){
                 print(i,spc);
         }
         print(endl);
 }
 template<typename T>
-void print(const vec<vec<T>>& a) noexcept {
+void print(const vec<vec<T>>& a){
         fore(i,a){
                 fore(j,i){
                         print(j,spc);
@@ -198,7 +199,7 @@ void print(const vec<vec<T>>& a) noexcept {
 }
 
 template<typename... Args>
-void print(const Args&... args) noexcept {
+void print(const Args&... args){
         void(initializer_list<int>{(print(args),0)...});
 }
 
@@ -224,18 +225,18 @@ void yorn(bool flag) noexcept {
 
 using namespace boost::multiprecision;
 using cint = cpp_int;
-using lfloat = cpp_dec_float_50;
+using lfloat = number<cpp_dec_float<12>>;
 
-void input(cint x) noexcept {
+void input(cint x){
         str s;
-        inpiut(s);
+        input(s);
 
         x.assign(s);
 }
 
-void input(cint x) noexcept {
+void input(lfloat x){
         str s;
-        inpiut(s);
+        input(s);
 
         x.assign(s);
 }
@@ -249,6 +250,7 @@ void input(cint x) noexcept {
 //#include <boost/graph/depth_first_search.hpp>
 //#include <boost/graph/dijkstra_shortest_paths.hpp>
 //#include <boost/graph/bellman_ford_shortest_paths.hpp>
+using namespace boost::graph;
 
 using Graph = adjacency_list<vecS,vecS,directedS,no_property,property<edge_weight_t,int64_t>>;
 using Vertex = graph_traits<Graph>::vertex_descriptor;
@@ -261,7 +263,7 @@ using Vertex = graph_traits<Graph>::vertex_descriptor;
 #include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 
-namespace boost::geometry;
+using namespace boost::geometry;
 using point = model::d2::point_xy<long double>;
 using line = model::linestring<point>;
 
