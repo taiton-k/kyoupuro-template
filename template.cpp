@@ -14,18 +14,6 @@ using namespace boost::assign;
 
 #include <boost/range/algorithm.hpp>
 
-#include <atcoder/modint>
-#include <atcoder/math>
-#include <atcoder/dsu>
-//#include <atcoder/segtree>
-using namespace::atcoder;
-using mint = modint1000000007;
-using mint2 = modint998244353;
-
-//#define USE_MULTIPRECISION
-//#define USE_BGL
-//#define USE_GEOMETRY
-
 #define rep_overload(i,n,m, REP, ...) REP
 #define rep_1(i,n) for(int i=0;i < static_cast<int>(n);++i)
 #define rep_2(i,a,n) for(int i=a;i < static_cast<int>(n);++i)
@@ -218,6 +206,8 @@ void yorn(bool flag) noexcept {
 }
 
 
+
+//#define USE_MULTIPRECISION
 #ifdef USE_MULTIPRECISION
 
 #include <boost/multiprecision/cpp_int.hpp>
@@ -243,20 +233,28 @@ void input(lfloat x){
 
 #endif
 
-#ifdef USE_BGL
+//#define USE_GRAPH
+#ifdef USE_GRAPH
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_utility.hpp>
-//#include <boost/graph/depth_first_search.hpp>
-//#include <boost/graph/dijkstra_shortest_paths.hpp>
-//#include <boost/graph/bellman_ford_shortest_paths.hpp>
+#include <boost/graph/breadth_first_search.hpp> // BFS
+#include <boost/graph/bipartite.hpp> // 二部グラフ判定
+//#include <boost/graph/depth_first_search.hpp> // DFS
+//#include <boost/graph/dijkstra_shortest_paths.hpp> // ダイクストラ
+//#include <boost/graph/bellman_ford_shortest_paths.hpp> // ベルマンフォード
 using namespace boost::graph;
 
-using Graph = adjacency_list<vecS,vecS,directedS,no_property,property<edge_weight_t,int64_t>>;
+using Graph = adjacency_list<vecS,vecS,undirectedS,no_property,no_property>;
 using Vertex = graph_traits<Graph>::vertex_descriptor;
 
+
+auto get_distance(ivec& dis){
+        return record_distances(dis.data(),on_tree_edge());
+}
 #endif
 
+//#define USE_GEOMETRY
 #ifdef USE_GEOMETRY
 
 #include <boost/geometry.hpp>
@@ -269,6 +267,23 @@ using line = model::linestring<point>;
 
 #endif
 
+//#define USE_ACL
+#ifdef USE_ACL
+
+#include <atcoder/modint>
+#include <atcoder/math>
+#include <atcoder/dsu>
+//#include <atcoder/segtree>
+using namespace::atcoder;
+using mint = modint1000000007;
+using mint2 = modint998244353;
+
+template<int M>
+void print(static_modint<M> x){
+        print(x.val());
+}
+
+#endif
 
 
 
