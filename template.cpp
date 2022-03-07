@@ -200,7 +200,7 @@ void yorn(bool flag) noexcept {
         cout << (flag ? "Yes" : "No") << endl;
 }
 
-
+//------------------------------
 
 //#define USE_MULTIPRECISION
 #ifdef USE_MULTIPRECISION
@@ -213,6 +213,8 @@ using cint = cpp_int;
 using lfloat = number<cpp_dec_float<12>>;
 
 #endif
+
+//------------------------------
 
 //#define USE_GRAPH
 #ifdef USE_GRAPH
@@ -236,6 +238,8 @@ auto get_distance(ivec& dis){
 
 #endif
 
+//------------------------------
+
 //#define USE_GEOMETRY
 #ifdef USE_GEOMETRY
 
@@ -249,12 +253,14 @@ using line = model::linestring<point>;
 
 #endif
 
+//------------------------------
+
 //#define USE_ACL
 #ifdef USE_ACL
 
 #include <atcoder/modint>
 #include <atcoder/math>
-#include <atcoder/dsu>
+#include <atcoder/dsu> // Union Find Tree
 //#include <atcoder/segtree>
 using namespace::atcoder;
 using mint = modint1000000007;
@@ -269,6 +275,7 @@ void print(static_modint<M> x){
 
 #endif
 
+//------------------------------
 
 
 
