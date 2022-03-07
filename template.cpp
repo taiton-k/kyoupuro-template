@@ -54,7 +54,7 @@ int main(void){
         cin.tie(nullptr);
         cout.tie(nullptr);
         ios::sync_with_stdio(false);
-        cout << fixed << setprecision(12);
+        //cout << fixed << setprecision(12);
         salve();
         return 0;
 }
@@ -90,7 +90,8 @@ template<typename T>
 void input(T& a){
         string s;
         input(s);
-        stringstream ss{s};
+
+        stringstream ss(s);
         ss >> a;
 }
 
@@ -112,10 +113,10 @@ void input(pair<T,U>& p){
 }
 template<typename... Args>
 void input(Args&... args){
-        void(initializer_list<bool>{(input(args),0)...});
+        void(initializer_list<bool>{(input(args),false)...});
 }
 
-void print(const char&);
+void print(const char);
 void print(const str&);
 template<typename T>void print(const T&);
 template<typename T>void print(const vec<T>&);
@@ -125,7 +126,7 @@ template<typename T>void print(const mset<T>&);
 template<typename T>void print(const vec<vec<T>>&);
 template<typename... Args>void print(const Args&...);
 
-void print(const char& c){
+void print(const char c){
         putchar_unlocked(c);
 }
 
@@ -180,7 +181,7 @@ void print(const vec<vec<T>>& a){
 
 template<typename... Args>
 void print(const Args&... args){
-        void(initializer_list<bool>{(print(args),0)...});
+        void(initializer_list<bool>{(print(args),false)...});
 }
 
 void yes() noexcept {
