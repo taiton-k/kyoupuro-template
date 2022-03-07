@@ -61,14 +61,10 @@ int main(void){
 
 void input(str&);
 void input(char&);
-void input(int&);
-void input(ll&);
-void input(float&);
-void input(double&);
-void input(ld&);
-template<typename T,typename U>void input(pair<T,U>&);
+template<typename T>void input(T&);
 template<typename T>void input(vec<T>&);
 template<typename T>void input(deq<T>&);
+template<typename T,typename U>void input(pair<T,U>&);
 template<typename... Args>void input(Args&...);
 
 void input(str& s){
@@ -89,31 +85,15 @@ void input(char& c){
                 c = getchar_unlocked();
         }
 }
-void input(int& x){
-        str s;
+
+template<typename T>
+void input(T& a){
+        string s;
         input(s);
-        x = stoi(s);
+        stringstream ss{s};
+        ss >> a;
 }
-void input(ll& x){
-        str s;
-        input(s);
-        x = stoll(s);
-}
-void input(float& x){
-        str s;
-        input(s);
-        x = stof(s);
-}
-void input(double& x){
-        str s;
-        input(s);
-        x = stod(s);
-}
-void input(ld& x){
-        str s;
-        input(s);
-        x = stold(s);
-}
+
 template<typename T>
 void input(vec<T>& a){
         fore(i,a){
@@ -132,9 +112,11 @@ void input(pair<T,U>& p){
 }
 template<typename... Args>
 void input(Args&... args){
-        void(initializer_list<int>{(input(args),0)...});
+        void(initializer_list<bool>{(input(args),0)...});
 }
 
+void print(const char&);
+void print(const str&);
 template<typename T>void print(const T&);
 template<typename T>void print(const vec<T>&);
 template<typename T>void print(const deq<T>&);
@@ -143,9 +125,19 @@ template<typename T>void print(const mset<T>&);
 template<typename T>void print(const vec<vec<T>>&);
 template<typename... Args>void print(const Args&...);
 
+void print(const char& c){
+        putchar_unlocked(c);
+}
+
+void print(const str& s){
+        for(char c : s){
+                putchar_unlocked(c);
+        }
+}
+
 template<typename T>
 void print(const T& a){
-        cout << a;
+        print(to_string(a));
 }
 
 template<typename T>
@@ -188,7 +180,7 @@ void print(const vec<vec<T>>& a){
 
 template<typename... Args>
 void print(const Args&... args){
-        void(initializer_list<int>{(print(args),0)...});
+        void(initializer_list<bool>{(print(args),0)...});
 }
 
 void yes() noexcept {
@@ -217,20 +209,6 @@ using namespace boost::multiprecision;
 using cint = cpp_int;
 using lfloat = number<cpp_dec_float<12>>;
 
-void input(cint x){
-        str s;
-        input(s);
-
-        x.assign(s);
-}
-
-void input(lfloat x){
-        str s;
-        input(s);
-
-        x.assign(s);
-}
-
 #endif
 
 //#define USE_GRAPH
@@ -252,6 +230,7 @@ using Vertex = graph_traits<Graph>::vertex_descriptor;
 auto get_distance(ivec& dis){
         return record_distances(dis.data(),on_tree_edge());
 }
+
 #endif
 
 //#define USE_GEOMETRY
