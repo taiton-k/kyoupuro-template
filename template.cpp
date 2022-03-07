@@ -51,7 +51,10 @@ constexpr char spc = ' ';
 
 void salve();
 int main(void){
-        cin.tie(nullptr),ios::sync_with_stdio(false),cout << fixed << setprecision(12);
+        cin.tie(nullptr);
+        cout.tie(nullptr);
+        ios::sync_with_stdio(false);
+        cout << fixed << setprecision(12);
         salve();
         return 0;
 }
@@ -253,6 +256,8 @@ using line = model::linestring<point>;
 using namespace::atcoder;
 using mint = modint1000000007;
 using mint2 = modint998244353;
+using mivec = vec<mint>;
+using mi2vec = vec<mint2>;
 
 template<int M>
 void print(static_modint<M> x){
