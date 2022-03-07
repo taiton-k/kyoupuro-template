@@ -186,6 +186,11 @@ void print(const Args&... args){
         void(initializer_list<bool>{(print(args),false)...});
 }
 
+template<typename T>
+int digitnum(const T a){
+        return log10(a)+1;
+}
+
 void yes() noexcept {
         cout << "Yes" << endl;
         exit(0);
