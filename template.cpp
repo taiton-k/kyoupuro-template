@@ -91,8 +91,8 @@ void input(T& a){
         string s;
         input(s);
 
-        stringstream ss(s);
-        ss >> a;
+        istringstream iss(s);
+        iss >> a;
 }
 
 template<typename T>
@@ -138,7 +138,9 @@ void print(const str& s){
 
 template<typename T>
 void print(const T& a){
-        print(to_string(a));
+        ostringstream oss;
+        oss << fixed << setprecision(12) << a;
+        print(oss.str());
 }
 
 template<typename T>
