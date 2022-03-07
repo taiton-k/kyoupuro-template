@@ -15,9 +15,10 @@ using namespace boost::assign;
 #include <boost/range/algorithm.hpp>
 
 #define rep_overload(i,n,m, REP, ...) REP
+#define rep_0(n) int rooooooop=static_cast<int>(n);while(rooooooop--)
 #define rep_1(i,n) for(int i=0;i < static_cast<int>(n);++i)
 #define rep_2(i,a,n) for(int i=a;i < static_cast<int>(n);++i)
-#define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1)(__VA_ARGS__)
+#define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1,rep_0)(__VA_ARGS__)
 #define fore(p,arr) for(auto&& p : arr)
 #define endl '\n'
 
@@ -281,6 +282,9 @@ void print(static_modint<M> x){
 #endif
 
 //------------------------------
+
+
+
 
 
 
