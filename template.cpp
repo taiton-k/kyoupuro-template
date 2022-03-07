@@ -46,8 +46,6 @@ using llpvec = vec<llp>;
 using ivec2 = vec<ivec>;
 using iset = set<int>;
 using ideq = deq<int>;
-using edge = std::array<int,3>;
-using graph = vec<ivec>;
 
 constexpr char spc = ' ';
 
@@ -55,7 +53,6 @@ void salve();
 int main(void){
         cin.tie(nullptr),ios::sync_with_stdio(false),cout << fixed << setprecision(12);
         salve();
-        cout << flush;
         return 0;
 }
 
