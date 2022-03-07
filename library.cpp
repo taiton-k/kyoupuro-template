@@ -246,3 +246,138 @@ void topological_sort(vector<vector<int>>& g,vector<int>& in,vector<int>& ans){
                 }
         }
 }
+
+// Fool function,but fastest(maybe)
+template<typename T>
+uint digitnum(const T a){
+        if(a < 0){
+                if(a < -100000000){
+                        if(a < -1000000000000){
+                                if(a < -10000000000){
+                                        if(a < -1000000000){
+                                                return 10;
+                                        }else{
+                                                return 11;
+                                        }
+                                }else{
+                                        if(a < -100000000000){
+                                                return 12;
+                                        }else{
+                                                return 13;
+                                        }
+                                }
+                        }else{
+                                if(a < -100000000000000){
+                                        if(a < -10000000000000){
+                                                return 14;
+                                        }else{
+                                                return 15;
+                                        }
+                                }else if(a < -10000000000000000){
+                                        if(a < -1000000000000000){
+                                                return 16;
+                                        }else{
+                                                return 17;
+                                        }
+                                }else{
+                                        return log10(a)+2;
+                                }
+                        }
+                }else{
+                        if(a < -10000){
+                                if(a < -100){
+                                        if(a < -10){
+                                                return 2;
+                                        }else{
+                                                return 3;
+                                        }
+                                }else{
+                                        if(a < -1000){
+                                                return 4;
+                                        }else{
+                                                return 5;
+                                        }
+                                }
+                        }else{
+                                if(a < -1000000){
+                                        if(a < -100000){
+                                                return 6;
+                                        }else{
+                                                return 7;
+                                        }
+                                }else{
+                                        if(a < -10000000){
+                                                return 8;
+                                        }else{
+                                                return 9;
+                                        }
+                                }
+                        }
+                }
+        }else{
+                if(a < 100000000){
+                        if(a < 10000){
+                                if(a < 100){
+                                        if(a < 10){
+                                                return 1;
+                                        }else{
+                                                return 2;
+                                        }
+                                }else{
+                                        if(a < 1000){
+                                                return 3;
+                                        }else{
+                                                return 4;
+                                        }
+                                }
+                        }else{
+                                if(a < 1000000){
+                                        if(a < 100000){
+                                                return 5;
+                                        }else{
+                                                return 6;
+                                        }
+                                }else{
+                                        if(a < 10000000){
+                                                return 7;
+                                        }else{
+                                                return 8;
+                                        }
+                                }
+                        }
+                }else{
+                        if(a < 1000000000000){
+                                if(a < 10000000000){
+                                        if(a < 1000000000){
+                                                return 9;
+                                        }else{
+                                                return 10;
+                                        }
+                                }else{
+                                        if(a < 100000000000){
+                                                return 11;
+                                        }else{
+                                                return 12;
+                                        }
+                                }
+                        }else{
+                                if(a < 100000000000000){
+                                        if(a < 10000000000000){
+                                                return 13;
+                                        }else{
+                                                return 14;
+                                        }
+                                }else if(a < 10000000000000000){
+                                        if(a < 1000000000000000){
+                                                return 15;
+                                        }else{
+                                                return 16;
+                                        }
+                                }else{
+                                        return log10(a)+1;
+                                }
+                        }
+                }
+        }
+}
+
