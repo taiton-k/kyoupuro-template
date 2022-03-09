@@ -193,17 +193,17 @@ int digitnum(const T a){
 }
 
 void yes() noexcept {
-        cout << "Yes" << endl;
+        print("Yes",endl);
         exit(0);
         return;
 }
 void no() noexcept {
-        cout << "No" << endl;
+        print("No",endl);
         exit(0);
         return;
 }
 void yorn(bool flag) noexcept {
-        cout << (flag ? "Yes" : "No") << endl;
+        print(flag ? "Yes" : "No",endl);
 }
 
 //------------------------------
@@ -228,14 +228,14 @@ using lfloat = number<cpp_dec_float<12>>;
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/breadth_first_search.hpp> // BFS
-#include <boost/graph/bipartite.hpp> // 二部グラフ判定
+//#include <boost/graph/bipartite.hpp> // 二部グラフ判定
 //#include <boost/graph/depth_first_search.hpp> // DFS
 //#include <boost/graph/dijkstra_shortest_paths.hpp> // ダイクストラ
 //#include <boost/graph/bellman_ford_shortest_paths.hpp> // ベルマンフォード
 using namespace boost::graph;
 
-using Graph = adjacency_list<vecS,vecS,undirectedS,no_property,no_property>;
-using Vertex = graph_traits<Graph>::vertex_descriptor;
+using graph = adjacency_list<vecS,vecS,undirectedS,no_property,no_property>;
+using vertex = graph_traits<Graph>::vertex_descriptor;
 
 
 auto get_distance(ivec& dis){
@@ -261,7 +261,7 @@ using line = model::linestring<point>;
 
 //------------------------------
 
-//#define USE_ACL
+#define USE_ACL
 #ifdef USE_ACL
 
 #include <atcoder/modint>
@@ -282,6 +282,7 @@ void print(static_modint<M> x){
 #endif
 
 //------------------------------
+
 
 
 
