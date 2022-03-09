@@ -15,9 +15,9 @@ using namespace boost::assign;
 #include <boost/range/algorithm.hpp>
 
 #define rep_overload(i,n,m, REP, ...) REP
-#define rep_0(n) int repeat_0=n;while(repeat_0--)
-#define rep_1(i,n) int repeat_1=n;for(int i=0;i < repeat_1;++i)
-#define rep_2(i,a,n) int repeat_2=n;for(int i=a;i < repeat_2;++i)
+#define rep_0(n) int define_repeat_0=n;while(define_repeat_0--)
+#define rep_1(i,n) int define_repeat_1=n;for(int i=0;i < define_repeat_1;++i)
+#define rep_2(i,a,n) int define_repeat_2=n;for(int i=a;i < define_repeat_2;++i)
 #define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1,rep_0)(__VA_ARGS__)
 #define fore(p,arr) for(auto&& p : arr)
 #define endl '\n'
