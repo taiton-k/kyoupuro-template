@@ -125,6 +125,7 @@ template<typename T>void print(const deq<T>&);
 template<typename T>void print(const set<T>&);
 template<typename T>void print(const mset<T>&);
 template<typename T>void print(const vec<vec<T>>&);
+template<typename T,typename U>void print(const pair<T,U>& p);
 template<typename... Args>void print(const Args&...);
 
 void print(const char c){
@@ -180,6 +181,10 @@ void print(const vec<vec<T>>& a){
                 }
                 print(endl);
         }
+}
+template<typename T,typename U>
+void print(const pair<T,U>& p){
+        print(p.first,spc,p.second);
 }
 
 template<typename... Args>
