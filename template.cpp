@@ -1,9 +1,13 @@
 // メイン部分(salve関数)は一番下
 
+#ifdef LOCAL_TEST
+#pragma GCC optimize("O0")
+#else
 #pragma GCC optimize("Ofast")
 #pragma GCC target ("avx2")
 #pragma GCC optimize("unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx")
+#endif
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -266,7 +270,7 @@ using line = model::linestring<point>;
 
 //------------------------------
 
-#define USE_ACL
+//#define USE_ACL
 #ifdef USE_ACL
 
 #include <atcoder/modint>
