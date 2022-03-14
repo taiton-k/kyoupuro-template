@@ -57,9 +57,15 @@ int main(void){
         return 0;
 }
 
+template<bool B>
+using enabler = enable_if_t<B,nullptr_t>;
+using swallow = initializer_list<bool>;
+
+
 void input(str&);
 void input(char&);
-template<typename T>void input(T&);
+template<typename T,enabler<is_integral_v<T>> = nullptr>void input(T& x);
+template<typename T,enabler<!is_integral_v<T>> = nullptr>void input(T& a);
 template<template<class...>class T,class...Args>void input(T<Args...>&);
 template<typename T,typename U>void input(pair<T,U>&);
 template<typename... Args>void input(Args&...);
@@ -83,7 +89,31 @@ void input(char& c){
         }
 }
 
-template<typename T>
+template<typename T,enabler<is_integral_v<T>>>
+void input(T& x){
+        x = 0;
+        int c = getchar_unlocked();
+        bool minus = false;
+
+        while(c == ' ' or c == '\n'){
+                c = getchar_unlocked();
+        }while(!(c == ' ' or c == '\n')){
+                if(c == '-'){
+                        minus = true;
+                }else if(isdigit(c)){
+                        x *= 10;
+                        x +  c-'0';
+                }
+                c = getchar_unlocked();
+        }
+        if(minus){
+                x *= -1;
+        }
+
+        ungetc(c,stdin);
+}
+
+template<typename T,enabler<!is_integral_v<T>>>
 void input(T& a){
         string s;
         input(s);
@@ -105,14 +135,13 @@ void input(pair<T,U>& p){
 }
 template<typename... Args>
 void input(Args&... args){
-        using swallow = initializer_list<bool>;
         void(swallow{(input(args),false)...});
 }
 
 void print(const char);
 void print(const str&);
-template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>void print(const T&);
-template<typename T,enable_if_t<is_floating_point_v<T>,nullptr_t> = nullptr>void print(const T&);
+template<typename T,enabler<is_integral_v<T>> = nullptr>void print(const T&);
+template<typename T,enabler<is_floating_point_v<T>> = nullptr>void print(const T&);
 template<template<class...>class T,class...Args>void print(const T<Args...>&);
 template<template<class...>class T,template<class...>class U,class...Args,class...Brgs>void print(const T<U<Brgs...>,Args...>&);
 template<typename T,typename U>void print(const pair<T,U>& p);
@@ -128,14 +157,18 @@ void print(const str& s){
         }
 }
 
-template<typename T,enable_if_t<is_integral_v<T>,nullptr_t>>
-void print(const T& a){
-        ostringstream oss;
-        oss << a;
-        print(oss.str());
+template<typename T,enabler<is_integral_v<T>>>
+void print(const T& x){
+        if(x < 0){
+                putchar_unlocked('-');
+        }
+        while(x != 0){
+                putchar_unlocked(x % 10 + '0');
+                x /= 10;
+        }
 }
 
-template<typename T,enable_if_t<is_floating_point_v<T>,nullptr_t>>
+template<typename T,enabler<is_floating_point_v<T>>>
 void print(const T& a){
         ostringstream oss;
         oss << fixed << setprecision(12) << a;
@@ -167,20 +200,19 @@ void print(const pair<T,U>& p){
 
 template<typename... Args>
 void print(const Args&... args){
-        using swallow = initializer_list<bool>;
         void(swallow{(print(args),false)...});
 }
 
-template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>
+template<typename T,enabler<is_integral_v<T>> = nullptr>
 size_t digitnum(const T a){
         return log10(a)+1;
 }
 
-template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>
+template<typename T,enabler<is_integral_v<T>> = nullptr>
 ll sum(T a) noexcept {
         return a*(a+1)/2;
 }
-template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>
+template<typename T,enabler<is_integral_v<T>> = nullptr>
 ll sum(T a,T b) noexcept {
         return abs(sum(b)-sum(a-1));
 }
