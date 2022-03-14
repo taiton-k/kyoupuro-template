@@ -1,11 +1,15 @@
 // メイン部分(salve関数)は一番下
 
 #ifdef LOCAL_TEST
+
 #pragma GCC optimize("O0")
+
 #else
+
 #pragma GCC optimize("Ofast")
 #pragma GCC optimize("unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,avx2")
+
 #endif
 
 #include <bits/stdc++.h>
@@ -16,14 +20,6 @@ using namespace boost;
 using namespace boost::assign;
 
 #include <boost/range/algorithm.hpp>
-
-#define rep_overload(i,n,m, REP, ...) REP
-#define rep_0(n) for(int define_repeat_0=n;define_repeat_0;--define_repeat_0)
-#define rep_1(i,n) for(int i=0,define_repeat_1=n;i < define_repeat_1;++i)
-#define rep_2(i,a,n) for(int i=a,define_repeat_2=n;i < define_repeat_2;++i)
-#define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1,rep_0)(__VA_ARGS__)
-#define fore(p,arr) for(auto&& p : arr)
-#define endl '\n'
 
 template<typename T>
 using vec = std::vector<T>;
@@ -51,8 +47,6 @@ using ivec2 = vec<ivec>;
 using iset = set<int>;
 using ideq = deq<int>;
 
-constexpr char spc = ' ';
-
 void salve();
 int main(void){
         cin.tie(nullptr);
@@ -66,8 +60,7 @@ int main(void){
 void input(str&);
 void input(char&);
 template<typename T>void input(T&);
-template<typename T>void input(vec<T>&);
-template<typename T>void input(deq<T>&);
+template<template<class...>class T,class...Args>void input(T<Args...>&);
 template<typename T,typename U>void input(pair<T,U>&);
 template<typename... Args>void input(Args&...);
 
@@ -99,35 +92,29 @@ void input(T& a){
         iss >> a;
 }
 
-template<typename T>
-void input(vec<T>& a){
-        fore(i,a){
+template<template<class...>class T,class...Args>
+void input(T<Args...>& a){
+        for(auto& i : a){
                 input(i);
         }
 }
-template<typename T>
-void input(deq<T>& a){
-        fore(i,a){
-                input(i);
-        }
-}
+
 template<typename T,typename U>
 void input(pair<T,U>& p){
         input(p.first,p.second);
 }
 template<typename... Args>
 void input(Args&... args){
-        void(initializer_list<bool>{(input(args),false)...});
+        using swallow = initializer_list<bool>;
+        void(swallow{(input(args),false)...});
 }
 
 void print(const char);
 void print(const str&);
-template<typename T>void print(const T&);
-template<typename T>void print(const vec<T>&);
-template<typename T>void print(const deq<T>&);
-template<typename T>void print(const set<T>&);
-template<typename T>void print(const mset<T>&);
-template<typename T>void print(const vec<vec<T>>&);
+template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>void print(const T&);
+template<typename T,enable_if_t<is_floating_point_v<T>,nullptr_t> = nullptr>void print(const T&);
+template<template<class...>class T,class...Args>void print(const T<Args...>&);
+template<template<class...>class T,template<class...>class U,class...Args,class...Brgs>void print(const T<U<Brgs...>,Args...>&);
 template<typename T,typename U>void print(const pair<T,U>& p);
 template<typename... Args>void print(const Args&...);
 
@@ -141,77 +128,75 @@ void print(const str& s){
         }
 }
 
-template<typename T>
+template<typename T,enable_if_t<is_integral_v<T>,nullptr_t>>
+void print(const T& a){
+        ostringstream oss;
+        oss << a;
+        print(oss.str());
+}
+
+template<typename T,enable_if_t<is_floating_point_v<T>,nullptr_t>>
 void print(const T& a){
         ostringstream oss;
         oss << fixed << setprecision(12) << a;
         print(oss.str());
 }
 
-template<typename T>
-void print(const vec<T>& a){
-        fore(i,a){
-                print(i,spc);
+template<template<class...>class T,class...Args>
+void print(const T<Args...>& a){
+        for(auto& i : a){
+                print(i,' ');
         }
-        print(endl);
+        print('\n');
 }
-template<typename T>
-void print(const deq<T>& a){
-        fore(i,a){
-                print(i,spc);
-        }
-        print(endl);
-}
-template<typename T>
-void print(const set<T>& a){
-        fore(i,a){
-                print(i,spc);
-        }
-        print(endl);
-}
-template<typename T>
-void print(const mset<T>& a){
-        fore(i,a){
-                print(i,spc);
-        }
-        print(endl);
-}
-template<typename T>
-void print(const vec<vec<T>>& a){
-        fore(i,a){
-                fore(j,i){
-                        print(j,spc);
+
+template<template<class...>class T,template<class...>class U,class...Args,class...Brgs>
+void print(const T<U<Brgs...>,Args...>& a){
+        for(auto& i : a){
+                for(auto& j:i){
+                        print(j,' ');
                 }
-                print(endl);
+                print('n');
         }
 }
+
 template<typename T,typename U>
 void print(const pair<T,U>& p){
-        print(p.first,spc,p.second);
+        print(p.first,' ',p.second);
 }
 
 template<typename... Args>
 void print(const Args&... args){
-        void(initializer_list<bool>{(print(args),false)...});
+        using swallow = initializer_list<bool>;
+        void(swallow{(print(args),false)...});
 }
 
-template<typename T>
-int digitnum(const T a){
+template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>
+size_t digitnum(const T a){
         return log10(a)+1;
 }
 
+template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>
+ll sum(T a) noexcept {
+        return a*(a+1)/2;
+}
+template<typename T,enable_if_t<is_integral_v<T>,nullptr_t> = nullptr>
+ll sum(T a,T b) noexcept {
+        return abs(sum(b)-sum(a-1));
+}
+
 void yes() noexcept {
-        print("Yes",endl);
+        print("Yes",'\n');
         exit(0);
         return;
 }
 void no() noexcept {
-        print("No",endl);
+        print("No",'\n');
         exit(0);
         return;
 }
 void yorn(bool flag) noexcept {
-        print(flag ? "Yes" : "No",endl);
+        print(flag ? "Yes" : "No",'\n');
 }
 
 //------------------------------
@@ -242,12 +227,23 @@ using lfloat = number<cpp_dec_float<12>>;
 //#include <boost/graph/bellman_ford_shortest_paths.hpp> // ベルマンフォード
 using namespace boost::graph;
 
-using graph = adjacency_list<vecS,vecS,undirectedS,no_property,no_property>;
-using vertex = graph_traits<Graph>::vertex_descriptor;
+using Graph = adjacency_list<vecS,vecS,undirectedS,no_property,no_property>;
+using Vertex = graph_traits<Graph>::vertex_descriptor;
 
 
-auto get_distance(ivec& dis){
-        return record_distances(dis.data(),on_tree_edge());
+void get_distance(Graph& g,Vertex from,ivec& dist){
+        breadth_first_search(
+                g,
+                from,
+                visitor(
+                        make_bfs_visitor(
+                                record_distances(
+                                        dist.data(),
+                                        on_tree_edge()
+                                )
+                        )
+                )
+        );
 }
 
 #endif
@@ -290,6 +286,15 @@ void print(static_modint<M> x){
 #endif
 
 //------------------------------
+
+#define rep_overload(i,n,m, REP, ...) REP
+#define rep_0(n) for(int define_repeat_0=n;define_repeat_0;--define_repeat_0)
+#define rep_1(i,n) for(int i=0,define_repeat_1=n;i < define_repeat_1;++i)
+#define rep_2(i,a,n) for(int i=a,define_repeat_2=n;i < define_repeat_2;++i)
+#define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1,rep_0)(__VA_ARGS__)
+#define fore(p,arr) for(auto& p : arr)
+constexpr char spc = ' ';
+constexpr char lend = '\n';
 
 
 
