@@ -1,5 +1,6 @@
 // メイン部分(salve関数)は一番下
 
+// pragmas
 #ifdef LOCAL_TEST
 
 #pragma GCC optimize("O0")
@@ -15,18 +16,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*
 #include <boost/assign.hpp>
-using namespace boost;
-using namespace boost::assign;
+namespace bt = boost;
+using namespace bt::assign;
 
 #include <boost/range/algorithm.hpp>
+*/
 
-template<typename T>
-using vec = std::vector<T>;
-template<typename T>
-using deq = std::deque<T>;
-template<typename T>
-using mset = std::multiset<T>;
+// Type alias ------------------
+
+template<typename T>using vec = vector<T>;
+template<typename T>using deq = deque<T>;
+template<typename T>using mset = multiset<T>;
 using ll = int64_t;
 using ld = long double;
 using uint = unsigned int;
@@ -37,15 +39,18 @@ using dvec = vec<double>;
 using bvec = vec<bool>;
 using cvec = vec<char>;
 using ldvec = vec<long double>;
-using str = std::string;
+using str = string;
 using svec = vec<str>;
 using iip = pair<int,int>;
 using llp = pair<ll,ll>;
 using iipvec = vec<iip>;
 using llpvec = vec<llp>;
-using ivec2 = vec<ivec>;
 using iset = set<int>;
 using ideq = deq<int>;
+
+
+
+// main function ---------------
 
 void salve();
 int main(void){
@@ -57,165 +62,200 @@ int main(void){
         return 0;
 }
 
+
+
+// Utilities -------------------
+
 template<bool B>
 using enabler = enable_if_t<B,nullptr_t>;
 using swallow = initializer_list<bool>;
-
-
-void input(str&);
-void input(char&);
-template<typename T,enabler<is_integral_v<T>> = nullptr>void input(T& x);
-template<typename T,enabler<!is_integral_v<T>> = nullptr>void input(T& a);
-template<template<class...>class T,class...Args>void input(T<Args...>&);
-template<typename T,typename U>void input(pair<T,U>&);
-template<typename... Args>void input(Args&...);
-
-void input(str& s){
-        int c = getchar_unlocked();
-
-        while(c == ' ' or c == '\n'){
-                c = getchar_unlocked();
-        }while(!(c == ' ' or c == '\n')){
-                s += c;
-                c = getchar_unlocked();
-        }
-
-        ungetc(c,stdin);
-}
-void input(char& c){
-        c = getchar_unlocked();
-        while(c == ' ' or c == '\n'){
-                c = getchar_unlocked();
-        }
-}
-
-template<typename T,enabler<is_integral_v<T>>>
-void input(T& x){
-        x = 0;
-        int c = getchar_unlocked();
-        bool minus = false;
-
-        while(c == ' ' or c == '\n'){
-                c = getchar_unlocked();
-        }while(!(c == ' ' or c == '\n')){
-                if(c == '-'){
-                        minus = true;
-                }else if(isdigit(c)){
-                        x *= 10;
-                        x +  c-'0';
-                }
-                c = getchar_unlocked();
-        }
-        if(minus){
-                x *= -1;
-        }
-
-        ungetc(c,stdin);
-}
-
-template<typename T,enabler<!is_integral_v<T>>>
-void input(T& a){
-        string s;
-        input(s);
-
-        istringstream iss(s);
-        iss >> a;
-}
-
-template<template<class...>class T,class...Args>
-void input(T<Args...>& a){
-        for(auto& i : a){
-                input(i);
-        }
-}
-
-template<typename T,typename U>
-void input(pair<T,U>& p){
-        input(p.first,p.second);
-}
-template<typename... Args>
-void input(Args&... args){
-        void(swallow{(input(args),false)...});
-}
-
-void print(const char);
-void print(const str&);
-template<typename T,enabler<is_integral_v<T>> = nullptr>void print(const T&);
-template<typename T,enabler<is_floating_point_v<T>> = nullptr>void print(const T&);
-template<template<class...>class T,class...Args>void print(const T<Args...>&);
-template<template<class...>class T,template<class...>class U,class...Args,class...Brgs>void print(const T<U<Brgs...>,Args...>&);
-template<typename T,typename U>void print(const pair<T,U>& p);
-template<typename... Args>void print(const Args&...);
-
-void print(const char c){
-        putchar_unlocked(c);
-}
-
-void print(const str& s){
-        for(char c : s){
-                putchar_unlocked(c);
-        }
-}
-
-template<typename T,enabler<is_integral_v<T>>>
-void print(const T& x){
-        if(x < 0){
-                putchar_unlocked('-');
-        }
-        while(x != 0){
-                putchar_unlocked(x % 10 + '0');
-                x /= 10;
-        }
-}
-
-template<typename T,enabler<is_floating_point_v<T>>>
-void print(const T& a){
-        ostringstream oss;
-        oss << fixed << setprecision(12) << a;
-        print(oss.str());
-}
-
-template<template<class...>class T,class...Args>
-void print(const T<Args...>& a){
-        for(auto& i : a){
-                print(i,' ');
-        }
-        print('\n');
-}
-
-template<template<class...>class T,template<class...>class U,class...Args,class...Brgs>
-void print(const T<U<Brgs...>,Args...>& a){
-        for(auto& i : a){
-                for(auto& j:i){
-                        print(j,' ');
-                }
-                print('n');
-        }
-}
-
-template<typename T,typename U>
-void print(const pair<T,U>& p){
-        print(p.first,' ',p.second);
-}
-
-template<typename... Args>
-void print(const Args&... args){
-        void(swallow{(print(args),false)...});
-}
 
 template<typename T,enabler<is_integral_v<T>> = nullptr>
 size_t digitnum(const T a){
         return log10(a)+1;
 }
 
+constexpr inline ll pow(int x,unsigned int y) noexcept {
+        ll res=1;
+
+        while(y!=0){
+                if(y % 2 == 1){
+                        res *= x;
+                }
+                y /= 2;
+                x *= x;
+        }
+
+        return res;
+}
+
 template<typename T,enabler<is_integral_v<T>> = nullptr>
-ll sum(T a) noexcept {
+constexpr inline ll sum(T a) noexcept {
         return a*(a+1)/2;
 }
 template<typename T,enabler<is_integral_v<T>> = nullptr>
-ll sum(T a,T b) noexcept {
+constexpr inline ll sum(T a,T b) noexcept {
         return abs(sum(b)-sum(a-1));
 }
+
+
+// Input,Output functions ------
+
+// Input class
+
+class fast_in {
+
+public :
+
+        template<typename... Args>
+        inline void operator () (Args&... args) {
+                void(swallow{(in(args),false)...});
+        }
+
+private:
+
+        inline void in(string& s){
+                int c = getchar_unlocked();
+
+                while(c == ' ' or c == '\n'){
+                        c = getchar_unlocked();
+                }while(!(c == ' ' or c == '\n')){
+                        s += c;
+                        c = getchar_unlocked();
+                }
+
+                ungetc(c,stdin);
+        }
+
+        inline void in(char& c){
+                c = getchar_unlocked();
+                while(c == ' ' or c == '\n'){
+                        c = getchar_unlocked();
+                }
+        }
+
+        template<typename T,enabler<is_integral_v<T>> = nullptr>
+        inline void in(T& x){
+                x = 0;
+                int c = getchar_unlocked();
+                bool minus = false;
+
+                while(c == ' ' or c == '\n'){
+                        c = getchar_unlocked();
+                }while(!(c == ' ' or c == '\n')){
+                        if(c == '-'){
+                                minus = true;
+                        }else if(isdigit(c)){
+                                x *= 10;
+                                x += c-'0';
+                        }
+                        c = getchar_unlocked();
+                }
+                if(minus){
+                        x *= -1;
+                }
+
+                ungetc(c,stdin);
+        }
+
+        template<typename T,enabler<!is_integral_v<T>> = nullptr>
+        inline void in(T& a){
+                string s;
+                in(s);
+
+                istringstream iss(s);
+                iss >> a;
+        }
+
+        template<template<class...>class T,class...Args>
+        inline void in(T<Args...>& a){
+                for(auto&& i : a){
+                        in(i);
+                }
+        }
+
+        template<typename T,typename U>
+        inline void in(pair<T,U>& p){
+                in(p.first,p.second);
+        }
+
+} input;
+
+// Output class
+
+class fast_out {
+
+public:
+
+        template<typename... Args>
+        inline void operator () (const Args&... args){
+                void(swallow{(out(args),false)...});
+        }
+
+private:
+
+        inline void out(const char c){
+                putchar_unlocked(c);
+        }
+
+        inline void out(const string& s){
+                for(char c : s){
+                        putchar_unlocked(c);
+                }
+        }
+
+        template<typename T,enabler<is_integral_v<T>> = nullptr>
+        inline void out(T x){
+                if(x == 0){
+                        putchar_unlocked('0');
+                }else{
+                        if(x < 0){
+                                putchar_unlocked('-');
+                                x *= -1;
+                        }
+                        T num = pow(10,static_cast<int>(log10(x)));
+                        while(num != 0){
+                                putchar_unlocked((x / num) + '0');
+
+                                x %= num;
+                                num /= 10;
+                        }
+                }
+        }
+
+        template<typename T,enabler<is_floating_point_v<T>> = nullptr>
+        inline void out(const T& a){
+                ostringstream oss;
+                oss << fixed << setprecision(12) << a;
+                out(oss.str());
+        }
+
+        template<template<class...>class T,class...Args>
+        inline void out(const T<Args...>& a){
+                for(auto& i : a){
+                        out(i,' ');
+                }
+                out('\n');
+        }
+
+        template<template<class...>class T,template<class...>class U,class...Args,class...Brgs>
+        inline void out(const T<U<Brgs...>,Args...>& a){
+                for(auto& i : a){
+                        for(auto& j:i){
+                                out(j,' ');
+                        }
+                        out('n');
+                }
+        }
+
+        template<typename T,typename U>
+        inline void out(const pair<T,U>& p){
+                out(p.first,' ',p.second);
+        }
+
+} print;
+
+//------------------------------
 
 void yes() noexcept {
         print("Yes",'\n');
@@ -239,7 +279,7 @@ void yorn(bool flag) noexcept {
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
-using namespace boost::multiprecision;
+namespace mp = bt::multiprecision;
 using cint = cpp_int;
 using lfloat = number<cpp_dec_float<12>>;
 
@@ -257,10 +297,10 @@ using lfloat = number<cpp_dec_float<12>>;
 //#include <boost/graph/depth_first_search.hpp> // DFS
 //#include <boost/graph/dijkstra_shortest_paths.hpp> // ダイクストラ
 //#include <boost/graph/bellman_ford_shortest_paths.hpp> // ベルマンフォード
-using namespace boost::graph;
+namespace graph = bt::graph;
 
-using Graph = adjacency_list<vecS,vecS,undirectedS,no_property,no_property>;
-using Vertex = graph_traits<Graph>::vertex_descriptor;
+using Graph = graph::adjacency_list<vecS,vecS,undirectedS,no_property,no_property>;
+using Vertex = graph::graph_traits<Graph>::vertex_descriptor;
 
 
 void get_distance(Graph& g,Vertex from,ivec& dist){
@@ -289,9 +329,9 @@ void get_distance(Graph& g,Vertex from,ivec& dist){
 #include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
 
-using namespace boost::geometry;
-using point = model::d2::point_xy<long double>;
-using line = model::linestring<point>;
+namespace gm = bt::geometry;
+using point = gm::model::d2::point_xy<long double>;
+using line = gm::model::linestring<point>;
 
 #endif
 
@@ -304,9 +344,9 @@ using line = model::linestring<point>;
 #include <atcoder/math>
 #include <atcoder/dsu> // Union Find Tree
 //#include <atcoder/segtree>
-using namespace::atcoder;
-using mint = modint1000000007;
-using mint2 = modint998244353;
+namespace ac = atcoder;
+using mint = ac::modint1000000007;
+using mint2 = ac::modint998244353;
 using mivec = vec<mint>;
 using mi2vec = vec<mint2>;
 
@@ -324,6 +364,10 @@ void print(static_modint<M> x){
 #define rep_1(i,n) for(int i=0,define_repeat_1=n;i < define_repeat_1;++i)
 #define rep_2(i,a,n) for(int i=a,define_repeat_2=n;i < define_repeat_2;++i)
 #define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1,rep_0)(__VA_ARGS__)
+#define drep_0(n) for(int i=0;i < n;++i)
+#define drep_1(i,n) for(int i=0;i < n;++i)
+#define drep_2(i,a,n) for(int i=a;i < n;++i)
+#define drep(...) rep_overload(__VA_ARGS__,drep_2,drep_1,drep_0)(__VA_ARGS__) // 'd' means dynamic
 #define fore(p,arr) for(auto& p : arr)
 constexpr char spc = ' ';
 constexpr char lend = '\n';
