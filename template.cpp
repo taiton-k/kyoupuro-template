@@ -483,6 +483,4 @@ constexpr char lend = '\n';
 
 void salve(void){
 
-        ll a = 10000;
-        print(log10(a));
 }
