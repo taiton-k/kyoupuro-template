@@ -22,9 +22,17 @@ void Prime(vector<bool> &prime){
         return;
 }
 
-// Char to Int
-int ctoi(char c){
-        return c-'0';
+// 約数列挙
+template<typename T,std::enable_if_t<std::is_integral_v<T>,nullptr_t> = nullptr>
+constexpr inline std::set<T> get_factor(T x){
+        std::set<T> res;
+        for(int i = 1;i <= sqrt(x);++i){
+                if(x%i==0){
+                        res.emplace_back(i);
+                        res.emplace_back(x/i);
+                }
+        }
+        return res;
 }
 
 // 素因数分解
@@ -51,6 +59,12 @@ vector<pair<ll,ll>> prime_factorize(ll n){
         }
 
         return res;
+}
+
+
+// Char to Int
+int ctoi(char c){
+        return c-'0';
 }
 
 // 2つの配列の要素と要素の差で一番小さいものを返す
