@@ -2,37 +2,12 @@
 #include <bits/stdc++.h>
 #include <unistd.h>
 
-constexpr inline int64_t ipow(int64_t x,unsigned int y) noexcept {
-        int64_t res=1;
-
-        while(y!=0){
-                if(y % 2 == 1){
-                        res *= x;
-                }
-                y /= 2;
-                x *= x;
-        }
-
-        return res;
-}
-
-constexpr inline size_t ilog10(const int64_t x) noexcept {
-        int64_t cnt = 1;
-        int res = 0;
-        while(cnt < x){
-                cnt *= 10;
-                ++res;
-        }
-        return res;
-}
-
 template<size_t BufferSize>
 class FastInput {
 
 public:
 
-        inline FastInput() noexcept :
-                buffer_(new char[BufferSize]){
+        inline FastInput() noexcept {
         }
 
         template<typename ...Args>
@@ -57,7 +32,7 @@ private:
         }
 
         inline int read_buf() noexcept {
-                return read(0,buffer_.get(),BufferSize);
+                return read(0,buffer_,BufferSize);
         }
 
 
@@ -130,13 +105,17 @@ private:
                 input(p.second);
         }
 
-        std::unique_ptr<char[]> buffer_;
+        //std::unique_ptr<char[]> buffer_;
+        static char buffer_[BufferSize];
 
         size_t readsize_ = 0;
 
         size_t counter_ = 0;
 
 };
+template<size_t BufferSize>
+char FastInput<BufferSize>::buffer_[BufferSize];
+
 FastInput<512*1024> input;
 
 
@@ -146,8 +125,7 @@ class FastOutput {
 
 public:
 
-        inline FastOutput() noexcept :
-                buffer_(new char[BufferSize]){
+        inline FastOutput() noexcept {
         }
 
         inline ~FastOutput() noexcept {
@@ -160,7 +138,7 @@ public:
         }
 
         inline void flush() noexcept {
-                write(1,buffer_.get(),counter_);
+                write(1,buffer_,counter_);
         }
 
 private:
@@ -195,14 +173,16 @@ private:
                 }else{
                         if(x < 0){
                                 write_char('-');
-                                x *= -1;
+                                x = -x;
                         }
-                        T num = pow(10,static_cast<int>(log10(x)));
-                        while(num != 0){
-                                write_char((x / num) + '0');
-
-                                x %= num;
-                                num /= 10;
+                        char num[19];
+                        int i;
+                        for(i=0;x!=0;++i){
+                                num[i] = '0' + x % 10;
+                                x /= 10;
+                        }
+                        for(;i>0;--i){
+                                write_char(num[i-1]);
                         }
                 }
         }
@@ -237,7 +217,7 @@ private:
                                 output(j);
                                 output(' ');
                         }
-                        output('n');
+                        output('\n');
                 }
         }
 
@@ -255,9 +235,26 @@ private:
         }
         #endif
 
-        std::unique_ptr<char[]> buffer_;
+        //std::unique_ptr<char[]> buffer_;
+        static char buffer_[BufferSize];
 
         size_t counter_;
 
 };
+template<size_t BufferSize>
+char FastOutput<BufferSize>::buffer_[BufferSize];
+
 FastOutput<512*1024> print;
+
+
+
+int main(void){
+        int t;
+        input(t);
+        ++t;
+        while(--t){
+                int64_t a,b;
+                input(a,b);
+                print(a+b,'\n');
+        }
+}

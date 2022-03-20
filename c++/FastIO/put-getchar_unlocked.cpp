@@ -163,7 +163,7 @@ private:
                                 output(j);
                                 output(' ');
                         }
-                        output('n');
+                        output('\n');
                 }
         }
 
