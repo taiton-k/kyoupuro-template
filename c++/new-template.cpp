@@ -88,21 +88,24 @@ public:
                 void(swallow{(void(input(args)),false)...});
         }
 
+        inline void update() noexcept {
+                read_buf();
+        }
 
 private:
 
         inline void read_char(char& c) noexcept {
                 if(counter_ == readsize_){
-                        readsize_ = read_buf();
-                        counter_ = 0;
+                        read_buf();
                 }
 
                 c = buffer_[counter_];
                 ++counter_;
         }
 
-        inline int read_buf() noexcept {
-                return read(0,buffer_,BufferSize);
+        inline void read_buf() noexcept {
+                readsize_ = read(0,buffer_,BufferSize);
+                counter_ = 0;
         }
 
 
@@ -211,7 +214,12 @@ public:
         }
 
         inline void flush() noexcept {
-                void(write(1,buffer_,counter_));
+                int state = write(1,buffer_,counter_);
+                if(state == -1){
+                        // Todo : print error state;
+                        exit(errno);
+                }
+                counter_ = 0;
         }
 
 private:
@@ -429,6 +437,8 @@ public:
                         container_.emplace_back(args...);
                 }else if constexpr (has_emplace_v<T>) {
                         container_.emplace(args...);
+                }else{
+                        static_assert([](){return false;}());
                 }
                 return *this;
         }
@@ -438,7 +448,7 @@ private:
 };
 
 template<class T>
-container_emplaceer<T> emplace(T& container){
+constexpr container_emplaceer<T> emplace(T& container){
         return container_emplaceer<T>{container};
 }
 
@@ -493,6 +503,8 @@ template<size_t N>using darr = arr<double,N>;
 template<size_t N>using ldarr = arr<ldouble,N>;
 template<size_t N>using carr = arr<char,N>;
 template<size_t N>using sarr = arr<str,N>;
+
+template<typename T>using ilist = std::initializer_list<T>;
 
 }
 
