@@ -408,6 +408,11 @@ constexpr inline void chmin(T& a,const T& b) noexcept {
         }
 }
 
+template<typename To,typename From>
+constexpr inline To cast(From&& a){
+        return static_cast<To>(a);
+}
+
 
 inline void yes() noexcept {
         print("Yes",'\n');
@@ -468,6 +473,7 @@ using dvec = vec<double>;
 using ldvec = vec<ldouble>;
 using cvec = vec<char>;
 using svec = vec<str>;
+template<typename T,typename U>using pvec = vec<std::pair<T,U>>;
 
 using iset = std::set<int>;
 using llset = std::set<ll>;
@@ -504,7 +510,7 @@ template<size_t N>using ldarr = arr<ldouble,N>;
 template<size_t N>using carr = arr<char,N>;
 template<size_t N>using sarr = arr<str,N>;
 
-template<typename T>using ilist = std::initializer_list<T>;
+template<typename T>using initlist = std::initializer_list<T>;
 
 }
 
