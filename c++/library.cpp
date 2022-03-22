@@ -238,27 +238,39 @@ struct lessAt{
 };
 
 // トポロジカルソート
-void topological_sort(vector<vector<int>>& g,vector<int>& in,vector<int>& ans){
-        priority_queue<int,vector<int>,greater<>> que;
+vector<int> topological_sort(vector<vector<int>>& g){
+        const auto n = g.size();
 
-        for(int i=0;i < static_cast<int>(in.size());++i){
-                if(in[i]==0){
-                        que.push(i);
+        vector<int> cnt(n);
+        for(auto& vertex : g){
+                for(auto edge : vertex){
+                        ++cnt[edge];
                 }
         }
 
-        while(!que.empty()){
-                int v = que.top();
-                ans.push_back(v+1);
-                que.pop();
+        queue<int> zero;
+        for(int i=0;i < static_cast<int>(n);++i){
+                if(cnt[i] == 0){
+                        zero.emplace(i);
+                }
+        }
 
-                for(int& e : g[v]){
-                        --in[e];
-                        if(in[e]==0){
-                                que.push(e);
+        vector<int> res;
+
+        while(!zero.empty()){
+                int from = zero.front();
+                zero.pop();
+                res.emplace_back(from+1);
+
+                for(auto v : g[from]){
+                        --cnt[v];
+                        if(cnt[v] == 0){
+                                zero.emplace(v);
                         }
                 }
         }
+
+        return res;
 }
 
 // Count digit
