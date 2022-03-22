@@ -267,3 +267,63 @@ int digitnum(const T a){
         return log10(a)+1;
 }
 
+// return Longest Common Subsequence size
+int get_lcs_size(string& s,string& t){
+        int n = s.size();
+        int m = t.size();
+
+        vector<vector<int>> dp(n+1,vector<int>(m+1));
+
+        for(int i=1;i < n+1;++i){
+                for(int j=1;j < m+1;++j){
+                        dp[i][j] = max({
+                                dp[i-1][j],
+                                dp[i][j-1],
+                                dp[i-1][j-1] + (s[i-1]==t[j-1])
+                        });
+                }
+
+        }
+
+        return dp.back().back();
+}
+
+// return Longet Common Subsequence
+string get_lcs(string& s,string& t){
+        int n = s.size();
+        int m = t.size();
+
+        vector<vector<int>> dp(n+1,vector<int>(m+1));
+
+        for(int i=1;i < n+1;++i){
+                for(int j=1;j < m+1;++j){
+                        dp[i][j] = max({
+                                dp[i-1][j],
+                                dp[i][j-1],
+                                dp[i-1][j-1] + (s[i-1]==t[j-1])
+                        });
+                }
+
+        }
+
+        string res;
+        for(int i=n,j=m;dp[i][j]!=0;){
+                if(dp[i-1][j] == dp[i][j-1]){
+                        if(s[i-1] == t[j-1]){
+                                res += s[i-1];
+                                --i;
+                                --j;
+                        }else{
+                                --i;
+                        }
+                }else if(dp[i-1][j] > dp[i][j-1]){
+                        --i;
+                }else{
+                        --j;
+                }
+        }
+
+        reverse(res.begin(),res.end());
+
+        return res;
+}
