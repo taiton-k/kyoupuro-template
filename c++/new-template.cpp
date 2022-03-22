@@ -8,8 +8,15 @@
 #endif
 //
 
+//# Includes ####################################################################
+
 #include <bits/stdc++.h>
 #include <unistd.h>
+
+//#define USE_ACL
+#ifdef USE_ACL
+#include <atcoder/all>
+#endif
 
 //# Main function ###############################################################
 
@@ -433,6 +440,7 @@ using str = std::string;
 template<typename T>using vec = std::vector<T>;
 using ivec = vec<int>;
 using llvec = vec<ll>;
+using bvec = vec<bool>;
 using fvec = vec<float>;
 using dvec = vec<double>;
 using ldvec = vec<ldouble>;
@@ -443,6 +451,7 @@ template<typename ...Args>using tvec = vec<std::tuple<Args...>>;
 
 using iset = std::set<int>;
 using llset = std::set<ll>;
+using bset = std::set<bool>;
 using fset = std::set<float>;
 using dset = std::set<double>;
 using ldset = std::set<ldouble>;
@@ -452,6 +461,7 @@ using sset = std::set<str>;
 template<typename T>using mset = std::multiset<T>;
 using imset = mset<int>;
 using llmset = mset<ll>;
+using bmset = mset<bool>;
 using fmset = mset<float>;
 using dmset = mset<double>;
 using ldmset = mset<ldouble>;
@@ -461,6 +471,7 @@ using smset = mset<str>;
 template<typename T>using deq = std::deque<T>;
 using ideq = deq<int>;
 using lldeq = deq<ll>;
+using bdeq = deq<bool>;
 using fdeq = deq<float>;
 using ddeq = deq<double>;
 using lddeq = deq<ldouble>;
@@ -470,6 +481,7 @@ using sdeq = deq<str>;
 template<typename T,size_t N>using arr = std::array<T,N>;
 template<size_t N>using iarr = arr<int,N>;
 template<size_t N>using llarr = arr<ll,N>;
+template<size_t N>using barr = arr<bool,N>;
 template<size_t N>using farr = arr<float,N>;
 template<size_t N>using darr = arr<double,N>;
 template<size_t N>using ldarr = arr<ldouble,N>;
