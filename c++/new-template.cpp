@@ -13,7 +13,7 @@
 #include <bits/stdc++.h>
 #include <unistd.h>
 
-//#define USE_ACL
+#define USE_ACL
 #ifdef USE_ACL
 #include <atcoder/all>
 #endif
@@ -273,7 +273,7 @@ private:
 
 #ifdef USE_ACL
         template<int M>
-        void output(static_modint<M> x) noexcept {
+        void output(atcoder::static_modint<M> x) noexcept {
                 output(x.val());
         }
 #endif
@@ -333,6 +333,25 @@ inline FastOutput<1024*1024> print;
 
 //# Utilities ####################################################################
 
+#ifdef USE_ACL
+template<int M,int O>
+constexpr inline bool operator < (const atcoder::static_modint<M>& a,const atcoder::static_modint<O>& b) noexcept {
+        return a.val() < b.val();
+}
+template<int M,int O>
+constexpr inline bool operator > (const atcoder::static_modint<M>& a,const atcoder::static_modint<O>& b) noexcept {
+        return a.val() > b.val();
+}
+template<int M,int O>
+constexpr inline bool operator <= (const atcoder::static_modint<M>& a,const atcoder::static_modint<O>& b) noexcept {
+        return a.val() <= b.val();
+}
+template<int M,int O>
+constexpr inline bool operator >= (const atcoder::static_modint<M>& a,const atcoder::static_modint<O>& b) noexcept {
+        return a.val() >= b.val();
+}
+#endif
+
 template<typename T>
 constexpr inline int ilog10(const T x) noexcept {
         T cnt = 1;
@@ -367,8 +386,8 @@ constexpr inline int64_t sum(T a,T b) noexcept {
         return abs(sum(b)-sum(a-1));
 }
 
-template<typename T>
-constexpr inline void chmax(T& a,const T& b) noexcept {
+template<typename T,typename U>
+constexpr inline void chmax(T& a,const U& b) noexcept {
         if(a < b){
                 a = b;
         }
