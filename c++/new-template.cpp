@@ -48,15 +48,6 @@ template<class T>using is_one_dimensional_container = std::conjunction<is_contai
 template<class T>constexpr bool is_one_dimensional_container_v = is_one_dimensional_container<T>::value;
 
 
-/*
-template<typename T,typename U>using if_integral = std::enable_if_t<std::is_integral_v<T>,U>;
-template<typename T,typename U>using if_floating_point = std::enable_if_t<std::is_floating_point_v<T>,U>;
-template<typename T,typename U>using if_container = std::enable_if_t<is_container_v<T>,U>;
-template<typename T,typename U>using if_multi_dimensional_container = std::enable_if_t<is_multi_dimensional_container_v<T>,U>;
-template<typename T,typename U>using if_one_dimensional_container = std::enable_if_t<is_one_dimensional_container_v<T>,U>;
-template<typename T,typename U>using if_other = std::enable_if_t<!std::is_integral_v<T> and !std::is_floating_point_v<T> and !is_container_v<T>,U>;
-*/
-
 template<class T>
 struct has_emplace_back {
         template<class U>static constexpr auto check(U&& a) -> decltype(a.emplace_back(),std::true_type{});
@@ -85,7 +76,7 @@ public:
 
         template<typename ...Args>
         inline void operator () (Args& ...args) noexcept {
-                void(swallow{(void(input(args)),false)...});
+                static_cast<void>(swallow{(input(args),false)...});
         }
 
         inline void update() noexcept {
@@ -160,9 +151,11 @@ private:
                                 a += c-'0';
                         }
 
-                        while(read_char(c),'0' <= c and c <= '9'){
+                        read_char(c);
+                        while('0' <= c and c <= '9'){
                                 a *= 10;
                                 a += c-'0';
+                                read_char(c);
                         }
 
                         if(minus){
@@ -182,17 +175,14 @@ private:
         }
 
 
-        static char buffer_[BufferSize];
+        static inline char buffer_[BufferSize];
 
         size_t readsize_ = 0;
 
         size_t counter_ = 0;
 
 };
-template<size_t BufferSize>
-char FastInput<BufferSize>::buffer_[BufferSize];
-
-FastInput<1024*1024> input;
+inline FastInput<1024*1024> input;
 
 //# Output Utility ##############################################################
 
@@ -210,11 +200,11 @@ public:
 
         template<typename... Args>
         inline void operator () (const Args&... args) noexcept {
-                void(swallow{(void(output(args)),false)...});
+                static_cast<void>(swallow{(output(args),false)...});
         }
 
         inline void flush() noexcept {
-                int state = write(1,buffer_,counter_);
+                ssize_t state = write(1,buffer_,counter_);
                 if(state == -1){
                         // Todo : print error state;
                         exit(errno);
@@ -227,21 +217,21 @@ private:
         inline void write_char(char c) noexcept {
                 if(counter_ == BufferSize){
                         flush();
-                        counter_ = 0;
                 }
                 buffer_[counter_] = c;
                 ++counter_;
         }
 
-        inline void write_chars(char *c,size_t s) noexcept {
-                if(counter_ + s <= BufferSize){
-                        memcpy(buffer_+counter_,c,BufferSize-counter_);
-                        flush();
-                        s -= BufferSize-counter_;
-                        counter_ = 0;
+        inline void write_chars(const char *c,size_t s) noexcept {
+                if(s != 0){
+                        if(counter_ + s >= BufferSize){
+                                //memcpy(buffer_+counter_,c,BufferSize-counter_);
+                                flush();
+                                //s -= BufferSize-counter_;
+                        }
+                        memcpy(buffer_+counter_,c,s);
+                        counter_ += s;
                 }
-                memcpy(buffer_+counter_,c,s);
-                counter_ += s;
         }
 
 
@@ -327,36 +317,12 @@ private:
                 }
         }
 
-//       template<template<class...>class T,class...Args>
-//       inline void output(const T<Args...>& a) noexcept {
-//               for(auto&& i : a){
-//                       output(i);
-//                       output(' ');
-//               }
-//               output('\n');
-//       }
-
-//       template<template<class...>class T,template<class...>class U,class...Args,class...Brgs>
-//       inline void output(const T<U<Brgs...>,Args...>& a) noexcept {
-//               for(auto& i : a){
-//                       for(auto&& j:i){
-//                               output(j);
-//                               output(' ');
-//                       }
-//                       output('\n');
-//               }
-//       }
-
-        //std::unique_ptr<char[]> buffer_;
-        static char buffer_[BufferSize];
+        static inline char buffer_[BufferSize];
 
         size_t counter_;
 
 };
-template<size_t BufferSize>
-char FastOutput<BufferSize>::buffer_[BufferSize];
-
-FastOutput<1024*1024> print;
+inline FastOutput<1024*1024> print;
 
 //# Utilities ####################################################################
 
@@ -414,20 +380,19 @@ constexpr inline To cast(From&& a){
 }
 
 
-inline void yes() noexcept {
+[[noreturn]] inline void yes() noexcept {
         print("Yes",'\n');
-        exit(0);
-        return;
+        std::exit(0);
 }
-inline void no() noexcept {
+[[noreturn]] inline void no() noexcept {
         print("No",'\n');
-        exit(0);
-        return;
+        std::exit(0);
 }
 inline void yorn(bool flag) noexcept {
         print(flag ? "Yes" : "No",'\n');
 }
 
+//# Own allocater ################################################################
 
 //# Easy push ####################################################################
 
@@ -474,6 +439,7 @@ using ldvec = vec<ldouble>;
 using cvec = vec<char>;
 using svec = vec<str>;
 template<typename T,typename U>using pvec = vec<std::pair<T,U>>;
+template<typename ...Args>using tvec = vec<std::tuple<Args...>>;
 
 using iset = std::set<int>;
 using llset = std::set<ll>;
@@ -518,13 +484,13 @@ using namespace std;
 using namespace taiton;
 
 #define rep_overload(i,n,m, REP, ...) REP
-#define rep_0(n) for(int define_repeat_0=n;define_repeat_0;--define_repeat_0)
-#define rep_1(i,n) for(int i=0,define_repeat_1=n;i < define_repeat_1;++i)
-#define rep_2(i,a,n) for(int i=a,define_repeat_2=n;i < define_repeat_2;++i)
+#define rep_0(n) for(int define_repeat_0=static_cast<int>(n);define_repeat_0;--define_repeat_0)
+#define rep_1(i,n) for(int i=0,define_repeat_1=static_cast<int>(n);i < define_repeat_1;++i)
+#define rep_2(i,a,n) for(int i=a,define_repeat_2=static_cast<int>(n);i < define_repeat_2;++i)
 #define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1,rep_0)(__VA_ARGS__)
-#define drep_0(n) for(int i=0;i < n;++i)
-#define drep_1(i,n) for(int i=0;i < n;++i)
-#define drep_2(i,a,n) for(int i=a;i < n;++i)
+#define drep_0(n) for(int i=0;i < static_cast<int>(n);++i)
+#define drep_1(i,n) for(int i=0;i < static_cast<int>(n);++i)
+#define drep_2(i,a,n) for(int i=static_cast<int>(n);i < static_cast<int>(n);++i)
 #define drep(...) rep_overload(__VA_ARGS__,drep_2,drep_1,drep_0)(__VA_ARGS__) // 'd' means dynamic
 #define fore(p,arr) for(auto& p : arr)
 constexpr char spc = ' ';
