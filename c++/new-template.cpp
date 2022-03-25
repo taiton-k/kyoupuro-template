@@ -18,6 +18,8 @@
 #include <atcoder/all>
 #endif
 
+#define USE_BOOST
+
 //# Main function ###############################################################
 
 void salve(void);
@@ -77,9 +79,6 @@ template<size_t BufferSize>
 class FastInput {
 
 public:
-
-        inline FastInput() noexcept {
-        }
 
         template<typename ...Args>
         inline void operator () (Args& ...args) noexcept {
@@ -193,53 +192,14 @@ inline FastInput<1024*1024> input;
 
 //# Output Utility ##############################################################
 
-template<size_t BufferSize>
 class FastOutput {
 
 public:
 
-        inline FastOutput() noexcept {
-        }
+        inline virtual void write_char(char) noexcept = 0;
 
-        inline ~FastOutput() noexcept {
-                flush();
-        }
+        inline virtual void write_chars(const char*,size_t) noexcept = 0;
 
-        template<typename... Args>
-        inline void operator () (const Args&... args) noexcept {
-                static_cast<void>(swallow{(output(args),false)...});
-        }
-
-        inline void flush() noexcept {
-                ssize_t state = write(1,buffer_,counter_);
-                if(state == -1){
-                        // Todo : print error state;
-                        exit(errno);
-                }
-                counter_ = 0;
-        }
-
-private:
-
-        inline void write_char(char c) noexcept {
-                if(counter_ == BufferSize){
-                        flush();
-                }
-                buffer_[counter_] = c;
-                ++counter_;
-        }
-
-        inline void write_chars(const char *c,size_t s) noexcept {
-                if(s != 0){
-                        if(counter_ + s >= BufferSize){
-                                //memcpy(buffer_+counter_,c,BufferSize-counter_);
-                                flush();
-                                //s -= BufferSize-counter_;
-                        }
-                        memcpy(buffer_+counter_,c,s);
-                        counter_ += s;
-                }
-        }
 
 
         inline void output(const char c) noexcept {
@@ -324,12 +284,91 @@ private:
                 }
         }
 
+};
+
+template<size_t BufferSize>
+class FastStdOut : private FastOutput {
+
+public:
+
+        inline ~FastStdOut() noexcept {
+                flush();
+        }
+
+        template<typename... Args>
+        inline void operator () (const Args&... args) noexcept {
+                static_cast<void>(swallow{(output(args),false)...});
+        }
+
+        inline void flush() noexcept {
+                ssize_t state = write(1,buffer_,counter_);
+                if(state == -1){
+                        // Todo : print error state;
+                        exit(errno);
+                }
+                counter_ = 0;
+        }
+
+private:
+
+        inline void write_char(char c) noexcept override {
+                if(counter_ == BufferSize){
+                        flush();
+                }
+                buffer_[counter_] = c;
+                ++counter_;
+        }
+
+        inline void write_chars(const char *c,size_t s) noexcept override {
+                if(s != 0){
+                        if(counter_ + s >= BufferSize){
+                                //memcpy(buffer_+counter_,c,BufferSize-counter_);
+                                flush();
+                                //s -= BufferSize-counter_;
+                        }
+                        memcpy(buffer_+counter_,c,s);
+                        counter_ += s;
+                }
+        }
+
         static inline char buffer_[BufferSize];
 
         size_t counter_;
 
 };
-inline FastOutput<1024*1024> print;
+inline FastStdOut<1024*1024> print;
+
+//# Debug print ##################################################################
+
+#ifdef LOCAL
+
+class FastStdErr : private FastOutput {
+
+public:
+
+        template<typename ...Args>
+        inline void operator () (const Args& ...args) noexcept {
+                static_cast<void>(swallow{output("👺 "),(output(args),false)...});
+        }
+
+        inline void write_char(char c) noexcept override {
+                write(2,&c,1);
+        }
+
+        inline void write_chars(const char *c,size_t s) noexcept override {
+                if(s != 0){
+                        write(2,c,s);
+                }
+        }
+
+};
+inline FastStdErr debug;
+
+#else
+
+inline void debug(...) noexcept {}
+
+#endif
 
 //# Utilities ####################################################################
 
@@ -363,7 +402,7 @@ constexpr inline int ilog10(const T x) noexcept {
         return res;
 }
 
-constexpr inline int64_t ipow(int64_t x,unsigned int y) noexcept {
+constexpr inline int64_t ipow(int64_t x,int64_t y) noexcept {
         int64_t res=1;
 
         while(y!=0){
@@ -401,7 +440,7 @@ constexpr inline void chmin(T& a,const T& b) noexcept {
 }
 
 template<typename To,typename From>
-constexpr inline To cast(From&& a){
+constexpr inline To cast(From&& a) noexcept {
         return static_cast<To>(a);
 }
 
@@ -420,7 +459,7 @@ inline void yorn(bool flag) noexcept {
 
 //# Own allocater ################################################################
 
-//# Easy push ####################################################################
+//# Container utility ############################################################
 
 template<class T>
 class container_emplaceer {
@@ -428,13 +467,13 @@ public:
         container_emplaceer(T& cont):container_(cont){}
 
         template<typename ...Args>
-        container_emplaceer<T>& operator () (Args&& ...args){
+        container_emplaceer<T>& operator () (const Args&& ...args){
                 if constexpr (has_emplace_back_v<T>) {
                         container_.emplace_back(args...);
                 }else if constexpr (has_emplace_v<T>) {
                         container_.emplace(args...);
                 }else{
-                        static_assert([](){return false;}());
+                        static_assert([]()constexpr{return false;}());
                 }
                 return *this;
         }
@@ -448,6 +487,34 @@ constexpr container_emplaceer<T> emplace(T& container){
         return container_emplaceer<T>{container};
 }
 
+//# STL Functions overload #######################################################
+
+#ifdef USE_BOOST
+}
+
+#include <boost/range/algorithm.hpp>
+#include <boost/range/numeric.hpp>
+
+namespace taiton{
+#else
+
+// いらなくね？
+template<class Container,class Function = std::less<>>
+inline auto sort(Container&& a,Function&& compare = std::less{}){return std::sort(std::begin(a),std::end(a),compare);}
+
+template<class Container,typename T,class Function = std::less<>>
+inline auto lower_bound(Container&& a,T&& x,Function&& compare = std::less{}){return std::lower_bound(std::begin(a),std::end(a),x,compare);}
+
+template<class Container,typename T,class Function = std::less<>>
+inline auto upper_bound(Container&& a,T&& x,Function&& compare = std::less{}){return std::upper_bound(std::begin(a),std::end(a),x,compare);}
+
+template<class Container,typename T>
+inline auto accumlate(Container&& a,T&& init){return std::accumulate(std::begin(a),std::end(a),init);}
+template<class Container,typename T,class Function>
+inline auto accumlate(Container&& a,T&& init,Function&& op){return std::accumulate(std::begin(a),std::end(a),init,op);}
+
+#endif
+
 //# Type alias ###################################################################
 
 using ll = int64_t;
@@ -456,7 +523,14 @@ using ull = uint64_t;
 using ldouble = long double;
 using str = std::string;
 
-template<typename T>using vec = std::vector<T>;
+//template<typename T>using vec = std::vector<T>;
+template<typename T>
+class vec : public std::vector<T> {
+        using Base = std::vector<T>;
+public:
+        using Base::Base;
+        vec(size_t size,const T& init):Base(size,init){}
+};
 using ivec = vec<int>;
 using llvec = vec<ll>;
 using bvec = vec<bool>;
@@ -467,6 +541,25 @@ using cvec = vec<char>;
 using svec = vec<str>;
 template<typename T,typename U>using pvec = vec<std::pair<T,U>>;
 template<typename ...Args>using tvec = vec<std::tuple<Args...>>;
+
+template<typename T>
+class vvec : public vec<vec<T>> {
+        using Base = vec<vec<T>>;
+public:
+        using Base::Base;
+        vvec(size_t h,size_t w):Base(h,vec<T>(w)){}
+        vvec(size_t h,size_t w,const T& init):Base(h,vec<T>(w,init)){}
+};
+using ivvec = vvec<int>;
+using llvvec = vvec<ll>;
+using bvvec = vvec<bool>;
+using fvvec = vvec<float>;
+using dvvec = vvec<double>;
+using ldvvec = vvec<ldouble>;
+using cvvec = vvec<char>;
+using svvec = vvec<str>;
+template<typename T,typename U>using pvvec = vvec<std::pair<T,U>>;
+template<typename ...Args>using tvvec = vvec<std::tuple<Args...>>;
 
 using iset = std::set<int>;
 using llset = std::set<ll>;
@@ -509,15 +602,28 @@ template<size_t N>using sarr = arr<str,N>;
 
 template<typename T>using initlist = std::initializer_list<T>;
 
+#ifdef USE_ACL
+using mint = atcoder::modint1000000007;
+using mint2 = atcoder::modint998244353;
+using mivec = vec<mint>;
+using mi2vec = vec<mint2>;
+#endif
+
 }
 
-using namespace std;
 using namespace taiton;
+using namespace std;
+#ifdef USE_ACL
+using namespace atcoder;
+#endif
+#ifdef USE_BOOST
+using namespace boost::range;
+#endif
 
 #define rep_overload(i,n,m, REP, ...) REP
-#define rep_0(n) for(int define_repeat_0=static_cast<int>(n);define_repeat_0;--define_repeat_0)
-#define rep_1(i,n) for(int i=0,define_repeat_1=static_cast<int>(n);i < define_repeat_1;++i)
-#define rep_2(i,a,n) for(int i=a,define_repeat_2=static_cast<int>(n);i < define_repeat_2;++i)
+#define rep_0(n) for(int repeatCounter=static_cast<int>(n);repeatCounter;--repeatCounter)
+#define rep_1(i,n) for(int i=0,repeatCounter=static_cast<int>(n);i < repeatCounter;++i)
+#define rep_2(i,a,n) for(int i=a,repeatCounter=static_cast<int>(n);i < repeatCounter;++i)
 #define rep(...) rep_overload(__VA_ARGS__,rep_2,rep_1,rep_0)(__VA_ARGS__)
 #define drep_0(n) for(int i=0;i < static_cast<int>(n);++i)
 #define drep_1(i,n) for(int i=0;i < static_cast<int>(n);++i)
