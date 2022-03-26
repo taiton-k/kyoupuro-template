@@ -544,8 +544,9 @@ template<typename T>
 class vec : public std::vector<T> {
         using Base = std::vector<T>;
 public:
-        using Base::Base;
+        vec(size_t size):Base(size){}
         vec(size_t size,const T& init):Base(size,init){}
+        vec(const std::initializer_list<T>& list):Base(list){}
 };
 using ivec = vec<int>;
 using llvec = vec<ll>;
