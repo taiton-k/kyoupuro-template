@@ -13,7 +13,7 @@
 #include <bits/stdc++.h>
 #include <unistd.h>
 
-#define USE_ACL
+//#define USE_ACL
 #ifdef USE_ACL
 #include <atcoder/all>
 #endif
@@ -196,9 +196,8 @@ class FastOutput {
 
 public:
 
-        inline virtual void write_char(char) noexcept = 0;
-
-        inline virtual void write_chars(const char*,size_t) noexcept = 0;
+        virtual void write_char(char) noexcept = 0;
+        virtual void write_chars(const char*,size_t) noexcept = 0;
 
 
 
@@ -206,7 +205,7 @@ public:
                 write_char(c);
         }
 
-        inline void output(const char* s) noexcept {
+        inline virtual void output(const char* s) noexcept {
                 while(*s != '\0'){
                         write_char(*s);
                         ++s;
@@ -348,16 +347,27 @@ public:
 
         template<typename ...Args>
         inline void operator () (const Args& ...args) noexcept {
-                static_cast<void>(swallow{output("👺 "),(output(args),false)...});
+                output("\e[1m\e[33m");
+                static_cast<void>(swallow{(output(args),false)...});
+                output("\e[0m");
         }
+
+private:
 
         inline void write_char(char c) noexcept override {
-                write(2,&c,1);
+                ssize_t state;
+                state = write(2,&c,1);
+                if(state == -1){
+                        std::exit(errno);
+                }
         }
 
-        inline void write_chars(const char *c,size_t s) noexcept override {
+        inline void write_chars(const char *s,size_t len) noexcept override {
                 if(s != 0){
-                        write(2,c,s);
+                        ssize_t state = write(2,s,len);
+                        if(state == -1){
+                                std::exit(errno);
+                        }
                 }
         }
 
@@ -426,16 +436,22 @@ constexpr inline int64_t sum(T a,T b) noexcept {
 }
 
 template<typename T,typename U>
-constexpr inline void chmax(T& a,const U& b) noexcept {
+constexpr inline bool chmax(T& a,const U& b) noexcept {
         if(a < b){
                 a = b;
+                return true;
+        }else{
+                return false;
         }
 }
 
 template<typename T>
-constexpr inline void chmin(T& a,const T& b) noexcept {
+constexpr inline bool chmin(T& a,const T& b) noexcept {
         if(a > b){
                 a = b;
+                return true;
+        }else{
+                return false;
         }
 }
 
