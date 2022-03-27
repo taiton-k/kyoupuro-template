@@ -209,14 +209,27 @@ class ruisekiwa {
 
 // ランレングス圧縮
 template<typename T>
-vector<pair<T,int>> run_length_encoding (vector<T>& v){
+vector<pair<T,int>> run_length_encoding (const vector<T>& v){
         vector<pair<T,int>> rle;
 
         for(int i=0;i < v.size();++i){
-                if(rle.back().first == v[i]){
+                if((!rle.empty()) and rle.back().first == v[i]){
                         ++rle.back().second;
                 }else{
-                        rle.push_back({v[i],0});
+                        rle.emplace_back(v[i],1);
+                }
+        }
+
+        return rle;
+}
+vector<pair<char,int>> run_length_encoding (const string& s){
+        vector<pair<char,int>> rle;
+
+        for(int i=0;i < static_cast<int>(s.size());++i){
+                if((!rle.empty()) and rle.back().first == s[i]){
+                        ++rle.back().second;
+                }else{
+                        rle.emplace_back(s[i],1);
                 }
         }
 
