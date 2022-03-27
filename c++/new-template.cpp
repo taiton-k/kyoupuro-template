@@ -13,7 +13,7 @@
 #include <bits/stdc++.h>
 #include <unistd.h>
 
-//#define USE_ACL
+#define USE_ACL
 #ifdef USE_ACL
 #include <atcoder/all>
 #endif
@@ -511,7 +511,7 @@ constexpr container_emplaceer<T> emplace(T& container){
 #include <boost/range/algorithm.hpp>
 #include <boost/range/numeric.hpp>
 
-namespace taiton{
+namespace taiton {
 #else
 
 // いらなくね？
@@ -528,6 +528,28 @@ template<class Container,typename T>
 inline auto accumlate(Container&& a,T&& init){return std::accumulate(std::begin(a),std::end(a),init);}
 template<class Container,typename T,class Function>
 inline auto accumlate(Container&& a,T&& init,Function&& op){return std::accumulate(std::begin(a),std::end(a),init,op);}
+
+#endif
+
+//# Graph ########################################################################
+
+#ifdef USE_BOOST
+}
+
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
+
+namespace taiton {
+
+template<class ifDirected,class EdgeProperty = boost::no_property>
+using graph_t_impl = boost::adjacency_list<boost::vecS,boost::vecS,ifDirected,boost::no_property,EdgeProperty>;
+
+using directed_graph_t = graph_t_impl<boost::directedS>;
+using undirected_graph_t = graph_t_impl<boost::undirectedS>;
+
+using graph_t = undirected_graph_t;
+using vertex_t = graph_t::vertex_descriptor;
+using edge_t = graph_t::edge_descriptor;
 
 #endif
 
@@ -560,12 +582,12 @@ template<typename T,typename U>using pvec = vec<std::pair<T,U>>;
 template<typename ...Args>using tvec = vec<std::tuple<Args...>>;
 
 template<typename T>
-class vvec : public vec<vec<T>> {
-        using Base = vec<vec<T>>;
+class vvec : public std::vector<std::vector<T>> {
+        using Base = std::vector<std::vector<T>>;
 public:
-        using Base::Base;
-        vvec(size_t h,size_t w):Base(h,vec<T>(w)){}
-        vvec(size_t h,size_t w,const T& init):Base(h,vec<T>(w,init)){}
+        vvec(size_t n):Base(n){}
+        vvec(size_t h,size_t w):Base(h,std::vector<T>(w)){}
+        vvec(size_t h,size_t w,const T& init):Base(h,std::vector<T>(w,init)){}
 };
 using ivvec = vvec<int>;
 using llvvec = vvec<ll>;
@@ -635,6 +657,7 @@ using namespace atcoder;
 #endif
 #ifdef USE_BOOST
 using namespace boost::range;
+namespace bst = boost;
 #endif
 
 #define rep_overload(i,n,m, REP, ...) REP
@@ -657,4 +680,4 @@ constexpr char lend = '\n';
 
 void salve(void){
 
-}
+};
