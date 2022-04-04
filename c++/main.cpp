@@ -1,4 +1,4 @@
-// メイン部分(salve関数)は一番下
+// メイン部分(solve関数)は一番下
 
 // 最適化
 #ifndef LOCAL
@@ -27,9 +27,9 @@
 
 //# Main function ###############################################################
 
-void salve(void);
+void solve(void);
 int main(void){
-        salve();
+        solve();
         return 0;
 }
 
@@ -61,22 +61,6 @@ template<class T>constexpr bool is_multi_dimensional_container_v = is_multi_dime
 template<class T>using is_one_dimensional_container = std::conjunction<is_container<T>,std::negation<is_multi_dimensional_container<T>>>;
 template<class T>constexpr bool is_one_dimensional_container_v = is_one_dimensional_container<T>::value;
 
-
-template<class T>
-struct has_emplace_back {
-        template<class U>static constexpr auto check(U&& a) -> decltype(a.emplace_back(),std::true_type{});
-        static constexpr auto check(...) -> std::false_type;
-        static constexpr bool value = decltype(check(std::declval<T>()))::value;
-};
-template<class T>constexpr bool has_emplace_back_v = has_emplace_back<T>::value;
-
-template<class T>
-struct has_emplace {
-        template<class U>static constexpr auto check(U&& a) -> decltype(a.emplace(),std::true_type{});
-        static constexpr auto check(...) -> std::false_type;
-        static constexpr bool value = decltype(check(std::declval<T>()))::value;
-};
-template<class T>constexpr bool has_emplace_v = has_emplace<T>::value;
 
 //# Input Utility ###############################################################
 
@@ -508,36 +492,6 @@ inline void yorn(bool flag) noexcept {
         print(flag ? "Yes" : "No",'\n');
 }
 
-//# Own allocater ################################################################
-
-//# Container utility ############################################################
-
-template<class T>
-class container_emplaceer {
-public:
-        container_emplaceer(T& cont):container_(cont){}
-
-        template<typename ...Args>
-        container_emplaceer<T>& operator () (const Args&& ...args){
-                if constexpr (has_emplace_back_v<T>) {
-                        container_.emplace_back(args...);
-                }else if constexpr (has_emplace_v<T>) {
-                        container_.emplace(args...);
-                }else{
-                        static_assert([]()constexpr{return false;}());
-                }
-                return *this;
-        }
-
-private:
-        T& container_;
-};
-
-template<class T>
-constexpr container_emplaceer<T> emplace(T& container){
-        return container_emplaceer<T>{container};
-}
-
 //# STL Functions overload #######################################################
 
 #ifdef USE_BOOST
@@ -548,23 +502,6 @@ constexpr container_emplaceer<T> emplace(T& container){
 #include <boost/range/algorithm_ext.hpp>
 
 namespace taiton {
-#else
-
-// いらなくね？
-template<class Container,class Function = std::less<>>
-inline auto sort(Container&& a,Function&& compare = std::less{}){return std::sort(std::begin(a),std::end(a),compare);}
-
-template<class Container,typename T,class Function = std::less<>>
-inline auto lower_bound(Container&& a,T&& x,Function&& compare = std::less{}){return std::lower_bound(std::begin(a),std::end(a),x,compare);}
-
-template<class Container,typename T,class Function = std::less<>>
-inline auto upper_bound(Container&& a,T&& x,Function&& compare = std::less{}){return std::upper_bound(std::begin(a),std::end(a),x,compare);}
-
-template<class Container,typename T>
-inline auto accumlate(Container&& a,T&& init){return std::accumulate(std::begin(a),std::end(a),init);}
-template<class Container,typename T,class Function>
-inline auto accumlate(Container&& a,T&& init,Function&& op){return std::accumulate(std::begin(a),std::end(a),init,op);}
-
 #endif
 
 //# Graph ########################################################################
@@ -574,6 +511,8 @@ inline auto accumlate(Container&& a,T&& init,Function&& op){return std::accumula
 
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
+#include <boost/graph/grid_graph.hpp>
+#include <boost/graph/breadth_first_search.hpp>
 
 namespace taiton {
 
@@ -583,9 +522,16 @@ using graph_t_impl = boost::adjacency_list<boost::vecS,boost::vecS,ifDirected,bo
 using directed_graph_t = graph_t_impl<boost::directedS>;
 using undirected_graph_t = graph_t_impl<boost::undirectedS>;
 
-using graph_t = undirected_graph_t;
-using vertex_t = graph_t::vertex_descriptor;
-using edge_t = graph_t::edge_descriptor;
+template<class Graph>
+using vertex_t = typename Graph::vertex_descriptor;
+
+template<class Graph>
+using edge_t = typename Graph::edge_descriptor;
+
+template<class Graph>
+void get_distance(const Graph& g,std::vector<int>& dist,typename Graph::vertex_descriptor s = 0){
+        boost::breadth_first_search(g,s,boost::visitor(boost::make_bfs_visitor(boost::record_distances(dist.data(),boost::on_tree_edge{}))));
+}
 
 #endif
 
@@ -595,6 +541,9 @@ using edge_t = graph_t::edge_descriptor;
 }
 
 #include <boost/geometry.hpp>
+#if BOOST_VERSION < 107800
+#include <boost/geometry/algorithms/detail/azimuth.hpp>
+#endif //BOOST_VERSION < 107800
 
 namespace taiton {
 
@@ -602,12 +551,6 @@ template<typename T>
 using point2_t = boost::geometry::model::d2::point_xy<T>;
 
 #if BOOST_VERSION < 107800
-}
-
-#include <boost/geometry/algorithms/detail/azimuth>
-
-namespace taiton {
-
 template<class Point1,class Point2>
 inline long double azimuth(const Point1 &p1,const Point2 &p2){
         return azimuth<long double>(p1,p2);
@@ -615,52 +558,54 @@ inline long double azimuth(const Point1 &p1,const Point2 &p2){
 
 template<typename T>
 class point3_t : public boost::geometry::model::point<T,3,boost::geometry::cs::cartesian> {
+        using Base = boost::geometry::model::point<T,3,boost::geometry::cs::cartesian>;
 public:
+        using Base::Base;
+
         constexpr inline T x() noexcept {
-                return this->get<0>();
+                return this->template get<0>();
         }
 
         constexpr inline T y() noexcept {
-                return this->get<1>();
+                return this->template get<1>();
         }
 
         constexpr inline T z() noexcept {
-                return this->get<2>();
+                return this->template get<2>();
         }
 };
 
-#else
+#else //BOOST_VERSION < 107800
 
 template<typename T>
 using point3_t = boost::geometry::model::d3::point_xyz<T>;
 
-#endif
+#endif //BOOST_VERSION < 107800
 
 
 template<class Point>
 using segment_t = boost::geometry::model::segment<Point>;
 
 template<class Point>
-inline Point rotate(Point geo,double deg){
-        boost::geometry::strategy::transform::rotate_transformer<boost::geometry::degree,long double,2,2> translate{deg};
-        boost::geometry::transform(geo,geo,translate);
+inline Point rotate(Point& geo,double deg){
+        boost::geometry::transform(geo,geo,boost::geometry::strategy::transform::rotate_transformer<boost::geometry::degree,long double,2,2>{deg});
         return geo;
 }
 
 template<class Point>
-inline Point rotate(Point geo,const Point& org,double deg){
-        boost::geometry::set<0>(geo,boost::geometry::get<0>(geo) - boost::geometry::get<0>(org));
-        boost::geometry::set<1>(geo,boost::geometry::get<1>(geo) - boost::geometry::get<1>(org));
+inline Point rotate(Point &geo,const Point& org,double deg){
+        geo.template set<0>(geo.template get<0>() - org.template get<0>());
+        geo.template set<1>(geo.template get<1>() - org.template get<1>());
 
         geo = rotate(geo,deg);
 
-        boost::geometry::set<0>(geo,boost::geometry::get<0>(geo) + boost::geometry::get<0>(org));
-        boost::geometry::set<1>(geo,boost::geometry::get<1>(geo) + boost::geometry::get<1>(org));
+        geo.template set<0>(geo.template get<0>() + org.template get<0>());
+        geo.template set<1>(geo.template get<1>() + org.template get<1>());
 
         return geo;
 }
 
-#endif
+#endif // USE_BOOST_GEOMETRY
 
 //# Multiprecision ###############################################################
 
@@ -810,14 +755,6 @@ constexpr char lend = '\n';
 
 
 
-void salve(void){
+void solve(void){
 
-        int n;
-        input(n);
-
-
-
-        rep(600){
-                
-        }
 }
