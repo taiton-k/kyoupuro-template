@@ -12,9 +12,15 @@
 
 ### コンパイル
 
-Makefileを用意しているため、`make`だけでコンパイルできる。
+[`Makefile`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/Makefile)を用意しているため、`make`だけでコンパイルできる。
 
 コンパイルに[`ccache`](https://github.com/ccache/ccache)を使ってるからコンパイルが高速！！！
+
+(でも[`zapcc`](https://github.com/yrnkrn/zapcc)の方がコンパイル時間短いっぽい)
+
+(だけど`zapcc`はサニタイザを使えないため、自分は普通の(`clang`)を使います…)
+
+(`gcc`じゃないのは、`clang`の方がコンパイルが速い(っぽい)から)
 
 ### 提出
 
