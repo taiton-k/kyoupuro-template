@@ -1,7 +1,6 @@
 .ccls-cache/
 .vscode
 *.out
-template
 abc*/
 arc*/
 agc*/
