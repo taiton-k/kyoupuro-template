@@ -1,5 +1,5 @@
-CC = ccache g++
-CFLAGS = -std=c++17 -Wall -Wextra -Wno-unused -O0 -DLOCAL -D_GLIBCXX_DEBUG
+CC = clang++
+CFLAGS = -std=c++17 -Wall -Wextra -Wno-unused -O0 -DLOCAL -D_GLIBCXX_DEBUG -fsanitize=undefined,address
 
 TARGET = a.out
 SRCS = main.cpp
@@ -11,7 +11,7 @@ $(TARGET): $(OBJS)
 	$(CC) -o $@ $^ $(LIBDIR) $(LIBS)
 
 $(OBJS): $(SRCS)
-	$(CC) $(CFLAGS) -I$(INCDIR) -c $(SRCS)
+	ccache $(CC) $(CFLAGS) -I$(INCDIR) -c $(SRCS)
 
 all: clean $(OBJS) $(TARGET)
 
