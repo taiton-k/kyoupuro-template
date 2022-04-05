@@ -8,7 +8,7 @@
 
 [`template.hpp`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/template.hpp)は提出時に展開される。
 
-[`submit.cpp`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/template.hpp)は展開されたやつ。
+[`submit.cpp`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/submit.cpp)は展開されたやつ。
 
 ### コンパイル
 
