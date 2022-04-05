@@ -1,3 +1,6 @@
+// メイン部分(solve関数)は一番下
+// https://github.com/taiton-k/kyoupuro-template
+
 #ifndef LOCAL
 #pragma GCC optimize("Ofast,unroll-loops")
 #pragma GCC target("avx,avx2")
