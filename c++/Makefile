@@ -1,4 +1,4 @@
-CC = clang++
+CC = zapcc++
 CFLAGS = -std=c++17 -Wall -Wextra -Wno-unused -O0 -DLOCAL -D_GLIBCXX_DEBUG
 SANITIZE = undefined,address
 
@@ -8,11 +8,17 @@ OBJS    = $(SRCS:.cpp=.o)
 INCDIR = ~/Documents/KyouPuro/c++/
 
 
-$(TARGET): $(OBJS)
-	$(CC) -o $@ $^ $(LIBDIR) $(LIBS) -fsanitize=$(SANITIZE)
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) -I$(INCDIR) $(SRCS)
 
-$(OBJS): $(SRCS)
-	ccache $(CC) $(CFLAGS) -I$(INCDIR) -c $(SRCS) -fsanitize=$(SANITIZE)
+#$(OBJS): $(SRCS)
+#	$(CC) $(CFLAGS) -I$(INCDIR) -c $(SRCS)
+
+sanitize:
+	clang++ $(CFLAGS) -I$(INCDIR) $(SRCS) -fsanitize=$(SANITIZE)
+
+gcc:
+	g++ $(CFLAGS) -I$(INCDIR) $(SRCS) -fsanitize=$(SANITIZE)
 
 all: clean $(OBJS) $(TARGET)
 
