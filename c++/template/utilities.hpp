@@ -40,6 +40,16 @@ constexpr inline int ilog10(T x) noexcept {
         return res;
 }
 
+template<typename T>
+constexpr inline int ilog2(T x) noexcept {
+        int res = 0;
+        while(x >= 2){
+                x /= 2;
+                ++res;
+        }
+        return res;
+}
+
 constexpr inline int64_t ipow(int64_t x,int64_t y) noexcept {
         int64_t res=1;
 
