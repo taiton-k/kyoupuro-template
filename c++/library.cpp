@@ -23,7 +23,7 @@ void Prime(vector<bool> &prime){
 }
 
 // 約数列挙
-template<typename T,std::enable_if_t<std::is_integral_v<T>,nullptr_t> = nullptr>
+template<typename T>
 constexpr inline std::set<T> get_factors(T x){
         std::set<T> res;
         for(int i = 1;i <= sqrt(x);++i){
