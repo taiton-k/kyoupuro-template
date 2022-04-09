@@ -26,6 +26,8 @@ public:
         vec(size_t size):Base(size){}
         vec(size_t size,const T& init):Base(size,init){}
         vec(const std::initializer_list<T>& list):Base(list){}
+        template<class Iterator>
+        vec(Iterator beg,Iterator end):Base(beg,end){}
 };
 using ivec = vec<int>;
 using llvec = vec<ll>;
