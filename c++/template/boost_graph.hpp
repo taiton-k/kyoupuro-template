@@ -2,7 +2,8 @@
 
 
 
-#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/directed_graph.hpp>
+#include <boost/graph/undirected_graph.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/bipartite.hpp>
@@ -12,17 +13,11 @@
 namespace taiton {
 
 
-template<class ifDirected,class EdgeProperty = boost::no_property>
-using graph_t_impl = boost::adjacency_list<boost::vecS,boost::vecS,ifDirected,boost::no_property,EdgeProperty>;
-
-using directed_graph_t = graph_t_impl<boost::directedS>;
-using undirected_graph_t = graph_t_impl<boost::undirectedS>;
+template<class Graph>
+using vertex_t = typename boost::graph_traits<Graph>::vertex_descriptor;
 
 template<class Graph>
-using vertex_t = typename Graph::vertex_descriptor;
-
-template<class Graph>
-using edge_t = typename Graph::edge_descriptor;
+using edge_t = typename boost::graph_traits<Graph>::edge_descriptor;
 
 
 template<class Graph>
