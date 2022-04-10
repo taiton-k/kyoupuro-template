@@ -41,5 +41,5 @@ oj t -N -d tests
 そして`submit.cpp`を提出。
 
 ~~~
-quom main.cpp submit.cpp && acc submit
+quom main.cpp submit.cpp -I ~/Documents/KyouPuro/c++/ && acc submit
 ~~~
