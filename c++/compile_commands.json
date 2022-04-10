@@ -1,0 +1,16 @@
+[
+        {
+                "arguments": [
+                        "clang++",
+                        "-std=c++17",
+                        "-Wall",
+                        "-Wextra",
+                        "-O0",
+                        "-DLOCAL",
+                        "-D_GLIBCXX_DEBUG",
+                        "-I ~/Documents/KyouPuro/c++/"
+                ],
+                "directory": "./",
+                "file": "main.cpp"
+        }
+]
