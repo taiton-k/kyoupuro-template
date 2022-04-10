@@ -38,6 +38,8 @@ oj t -N -d tests
 
 [`quom`](https://github.com/Viatorus/quom)を使ってヘッダーを展開し、`submit.cpp`に出力。
 
+(`quom`の`trim`は改造？によって無効化してる)
+
 そして`submit.cpp`を提出。
 
 ~~~
