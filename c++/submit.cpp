@@ -12,6 +12,8 @@
 //#define USE_BOOST_MULTIPRECISION
 //#define USE_BOOST_GEOMETRY
 
+
+
 #include <bits/stdc++.h>
 #include <unistd.h>
 
@@ -19,15 +21,23 @@
 #include <atcoder/all>
 #endif
 
+
+
 #include <string>
 #include <array>
 #include <sstream>
 #include <unistd.h>
 
+
+
 #include <initializer_list>
 #include <type_traits>
 
+
+
 using swallow = std::initializer_list<bool>;
+
+
 
 template<class T>
 struct is_container {
@@ -43,6 +53,7 @@ struct is_container {
 
 template<class T>
 constexpr bool is_container_v = is_container<T>::value;
+
 
 template<class T>
 struct is_multi_dimensional_container {
@@ -68,7 +79,12 @@ template<class T>
 using is_one_dimensional_container
         = std::conditional_t<is_one_dimensional_container_v<T>,std::true_type,std::false_type>;
 
+
+
+
 namespace taiton {
+
+
 
 template<size_t BufferSize>
 class FastInput {
@@ -99,6 +115,7 @@ private:
                 readsize_ = read(0,buffer_,BufferSize);
                 counter_ = 0;
         }
+
 
         inline void input(std::string& s) noexcept {
                 char c;
@@ -174,6 +191,7 @@ private:
                 }
         }
 
+
         static inline char buffer_[BufferSize];
 
         size_t readsize_ = 0;
@@ -183,7 +201,11 @@ private:
 };
 inline FastInput<1024*1024> input;
 
+
+
 }
+
+
 
 #include <string>
 #include <array>
@@ -192,7 +214,13 @@ inline FastInput<1024*1024> input;
 #include <cstring>
 #include <unistd.h>
 
+
+
+
+
 namespace taiton {
+
+
 
 class FastOutput {
 
@@ -200,6 +228,8 @@ public:
 
         virtual void write_char(char) noexcept = 0;
         virtual void write_chars(const char*,size_t) noexcept = 0;
+
+
 
         inline void output(const char c) noexcept {
                 write_char(c);
@@ -285,6 +315,8 @@ public:
 
 };
 
+
+
 template<size_t BufferSize>
 class FastStdOut : private FastOutput {
 
@@ -336,6 +368,8 @@ private:
 
 };
 
+
+
 class FastStdErr : private FastOutput {
 
 public:
@@ -371,11 +405,22 @@ private:
 inline FastStdOut<1024*1024> print;
 inline FastStdErr debug;
 
+
+
 }
+
+
 
 #include <cmath>
 
+
+
+
+
+
 namespace taiton {
+
+
 
 #ifdef USE_ACL
 template<int M,int O>
@@ -401,6 +446,16 @@ constexpr inline int ilog10(T x) noexcept {
         int res = 0;
         while(x >= 10){
                 x /= 10;
+                ++res;
+        }
+        return res;
+}
+
+template<typename T>
+constexpr inline int ilog2(T x) noexcept {
+        int res = 0;
+        while(x >= 2){
+                x /= 2;
                 ++res;
         }
         return res;
@@ -485,6 +540,7 @@ constexpr inline To cast(From&& a) noexcept {
         return static_cast<To>(a);
 }
 
+
 [[noreturn]] inline void yes() noexcept {
         print("Yes",'\n');
         std::exit(0);
@@ -497,10 +553,15 @@ inline void yorn(bool flag) noexcept {
         print(flag ? "Yes" : "No",'\n');
 }
 
+
 constexpr char spc = ' ';
 constexpr char lend = '\n';
 
+
+
 }
+
+
 
 #ifdef USE_BOOST
 #include <boost/range/algorithm.hpp>
@@ -509,29 +570,32 @@ constexpr char lend = '\n';
 
 #ifdef USE_BOOST_GRAPH
 
-#include <boost/graph/adjacency_list.hpp>
+
+
+
+#include <boost/graph/directed_graph.hpp>
+#include <boost/graph/undirected_graph.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/breadth_first_search.hpp>
 #include <boost/graph/bipartite.hpp>
 
+
+
 namespace taiton {
 
-template<class ifDirected,class EdgeProperty = boost::no_property>
-using graph_t_impl = boost::adjacency_list<boost::vecS,boost::vecS,ifDirected,boost::no_property,EdgeProperty>;
-
-using directed_graph_t = graph_t_impl<boost::directedS>;
-using undirected_graph_t = graph_t_impl<boost::undirectedS>;
 
 template<class Graph>
-using vertex_t = typename Graph::vertex_descriptor;
+using vertex_t = typename boost::graph_traits<Graph>::vertex_descriptor;
 
 template<class Graph>
-using edge_t = typename Graph::edge_descriptor;
+using edge_t = typename boost::graph_traits<Graph>::edge_descriptor;
+
 
 template<class Graph>
 void get_distance(const Graph& g,std::vector<int>& dist,typename Graph::vertex_descriptor s = 0){
         boost::breadth_first_search(g,s,boost::visitor(boost::make_bfs_visitor(boost::record_distances(dist.data(),boost::on_tree_edge{}))));
 }
+
 
 }
 
@@ -539,12 +603,16 @@ void get_distance(const Graph& g,std::vector<int>& dist,typename Graph::vertex_d
 
 #ifdef USE_BOOST_GEOMETRY
 
+
 #include <boost/geometry.hpp>
 #if BOOST_VERSION < 107800
 #include <boost/geometry/algorithms/detail/azimuth.hpp>
 #endif //BOOST_VERSION < 107800
 
+
+
 namespace taiton{
+
 
 #if BOOST_VERSION < 107800
 template<class Point1,class Point2>
@@ -578,6 +646,7 @@ using point3_t = boost::geometry::model::d3::point_xyz<T>;
 
 #endif //BOOST_VERSION < 107800
 
+
 template<typename T>
 using point2_t = boost::geometry::model::d2::point_xy<T>;
 
@@ -603,26 +672,34 @@ inline Point rotate(Point geo,const Point& org,double deg){
         return geo;
 }
 
+
 } // namespace taiton
 
 #endif
 
 #ifdef USE_BOOST_MULTIPRECISION
 
+
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
+
+
 namespace taiton {
+
 
 namespace mp = boost::multiprecision;
 using cint = mp::cpp_int;
 using lfloat = mp::number<mp::cpp_dec_float<30>>;
+
 
 }
 
 #endif
 
 #endif
+
+
 
 #include <vector>
 #include <string>
@@ -632,6 +709,8 @@ using lfloat = mp::number<mp::cpp_dec_float<30>>;
 #include <utility>
 
 namespace taiton {
+
+
 
 using ll = int64_t;
 using uint = uint32_t;
@@ -648,6 +727,8 @@ public:
         vec(size_t size):Base(size){}
         vec(size_t size,const T& init):Base(size,init){}
         vec(const std::initializer_list<T>& list):Base(list){}
+        template<class Iterator>
+        vec(Iterator beg,Iterator end):Base(beg,end){}
 };
 using ivec = vec<int>;
 using llvec = vec<ll>;
@@ -729,7 +810,11 @@ using mivec = vec<mint>;
 using mi2vec = vec<mint2>;
 #endif
 
+
+
 }
+
+
 
 #define rep_overload(i,n,m, REP, ...) REP
 #define rep_0(n) for(int repeatCounter=static_cast<int>(n);repeatCounter;--repeatCounter)
@@ -742,6 +827,9 @@ using mi2vec = vec<mint2>;
 #define drep(...) rep_overload(__VA_ARGS__,drep_2,drep_1,drep_0)(__VA_ARGS__) // 'd' means dynamic
 #define fore(p,arr) for(auto& p : arr)
 
+
+
+
 void solve(void);
 int main(void){
 
@@ -753,6 +841,9 @@ int main(void){
 using namespace std;
 using namespace boost;
 using namespace taiton;
+
+
+
 
 void solve(void){
 
