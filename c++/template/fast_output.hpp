@@ -162,6 +162,7 @@ private:
 };
 
 
+#ifdef LOCAL
 
 class FastStdErr : private FastOutput {
 
@@ -197,6 +198,12 @@ private:
 
 inline FastStdOut<1024*1024> print;
 inline FastStdErr debug;
+
+#else // #ifdef LOCAL
+
+constexpr inline void debug(...) noexcept {}
+
+#endif // #ifdef LOCAL
 
 
 
