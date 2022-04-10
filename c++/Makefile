@@ -9,16 +9,16 @@ INCDIR = ~/Documents/KyouPuro/c++/
 
 
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -I$(INCDIR) $(SRCS)
+	$(CC) $(CFLAGS) -I $(INCDIR) $(SRCS)
 
 #$(OBJS): $(SRCS)
 #	$(CC) $(CFLAGS) -I$(INCDIR) -c $(SRCS)
 
 sanitize:
-	clang++ $(CFLAGS) -I$(INCDIR) $(SRCS) -fsanitize=$(SANITIZE)
+	clang++ $(CFLAGS) -I $(INCDIR) $(SRCS) -fsanitize=$(SANITIZE)
 
 gcc:
-	g++ $(CFLAGS) -I$(INCDIR) $(SRCS) -fsanitize=$(SANITIZE)
+	g++ $(CFLAGS) -I $(INCDIR) $(SRCS) -fsanitize=$(SANITIZE)
 
 all: clean $(OBJS) $(TARGET)
 
