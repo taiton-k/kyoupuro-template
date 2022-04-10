@@ -14,8 +14,13 @@
 
 #include "template.hpp"
 using namespace std;
-using namespace boost;
 using namespace taiton;
+#ifdef USE_BOOST
+using namespace boost;
+#endif
+#ifdef USE_ACL
+using namespace atcoder;
+#endif
 
 
 
