@@ -160,6 +160,7 @@ private:
         size_t counter_;
 
 };
+inline FastStdOut<1024*1024> print;
 
 
 #ifdef LOCAL
@@ -195,8 +196,6 @@ private:
         }
 
 };
-
-inline FastStdOut<1024*1024> print;
 inline FastStdErr debug;
 
 #else // #ifdef LOCAL
