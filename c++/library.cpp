@@ -352,3 +352,129 @@ string get_lcs(string& s,string& t){
 
         return res;
 }
+
+
+// Run Length Encoding
+template<typename T,typename U = std::size_t,class Container = std::vector<std::pair<T,U>>>
+class rle_array {
+
+public:
+
+        inline void push_back(T x,U n){
+                if(!data_.empty() and (data_.back().first == x)){
+                        data_.back().second += n;
+                }else{
+                        data_.emplace_back(x,n);
+                }
+        }
+
+        inline void push_back(T x){
+                if(!data_.empty() and (data_.back().first == x)){
+                        ++data_.back().second;
+                }else{
+                        data_.emplace_back(x,1);
+                }
+        }
+
+        inline std::vector<std::pair<T,U>> back(U n){
+                std::vector<std::pair<T,U>> res;
+
+                auto itr = data_.rbegin();
+
+                while(n > 0 and itr != data_.rend()){
+                        if(itr->second > n){
+                                res.emplace_back(itr->first,itr->second - n);
+                                n = 0;
+                        }else{
+                                res.emplace_back(*itr);
+                                n -= itr->second;
+                        }
+                        ++itr;
+                }
+
+                return res;
+        }
+
+        inline T back(){
+                return data_.back().front;
+        }
+
+        inline std::vector<std::pair<T,U>> front(U n){
+                std::vector<std::pair<T,U>> res;
+
+                auto itr = data_.begin();
+
+                while(n > 0 and itr != data_.end()){
+                        if(itr->second > n){
+                                res.emplace_back(itr->first,n);
+                                n = 0;
+                        }else{
+                                res.emplace_back(*itr);
+                                n -= itr->second;
+                        }
+                        ++itr;
+                }
+
+                return res;
+        }
+
+        inline T front(){
+                return data_.front().first;
+        }
+
+        inline void pop_back(U n){
+                while(n > 0){
+                        if(data_.back().second > n){
+                                data_.back().second -= n;
+                                n = 0;
+                        }else{
+                                n -= data_.back().second;
+                                data_.pop_back();
+                        }
+                }
+        }
+
+        inline Container data(){
+                return data_;
+        }
+
+protected:
+
+        Container data_;
+
+};
+
+template<typename T,typename U = std::size_t>
+class rle_deque : public rle_array<T,U,std::deque<std::pair<T,U>>> {
+        using rle_array<T,U,std::deque<std::pair<T,U>>>::data_;
+
+public:
+
+        inline void push_front(T x,U n){
+                if(!data_.empty() and (data_.first().first == x)){
+                        data_.front().second += n;
+                }else{
+                        data_.emplace_front(x,n);
+                }
+        }
+
+        inline void push_front(T x){
+                if(!data_.empty() and (data_.front().first == x)){
+                        ++data_.front().second;
+                }else{
+                        data_.emplace_front(x,1);
+                }
+        }
+
+        inline void pop_front(U n){
+                while(n > 0){
+                        if(data_.front().second > n){
+                                data_.front().second -= n;
+                                n = 0;
+                        }else{
+                                n -= data_.front().second;
+                                data_.pop_front();
+                        }
+                }
+        }
+};
