@@ -2,60 +2,70 @@
 using namespace std;
 using ll = int64_t;
 
-// エラトステネスの篩
-void Prime(vector<bool> &prime){
-        fill(prime.begin(),prime.end(),true);
-        int n=prime.size();
-        prime[0]=false;
-        prime[1]=false;
 
-        for(int i=0;i < sqrt(n);i++){
-                if(prime[i]==true){
+namespace taiton {
+
+
+// エラトステネスの篩
+inline std::vector<bool> sieve_of_eratosthenes(std::size_t n) noexcept {
+        std::vector<bool> sieve(n+1,true);
+
+        sieve[0] = sieve[1] = false;
+
+        for(std::size_t i = 2;i * i < n * n;i++){
+                if(sieve[i] == true){
                         continue;
                 }
 
-                for(int j=2;j*i<n;j++){
-                        prime[j*i]=false;
+                for(std::size_t j = 2;j * i < n;j++){
+                        sieve[j * i]=false;
                 }
         }
 
-        return;
+        return sieve;
 }
 
 // 約数列挙
 template<typename T>
-constexpr inline std::set<T> get_factors(T x){
-        std::set<T> res;
-        for(int i = 1;i <= sqrt(x);++i){
-                if(x%i==0){
-                        res.emplace(i);
-                        res.emplace(x/i);
+constexpr inline std::vector<T> enum_divisors(T n){
+        std::vector<T> res;
+
+        for(int64_t i = 1;i * i <= n;++i){
+                if(n % i==0){
+                        res.emplace_back(n/i);
+
+                        if(i != n/i){
+                                res.emplace_back(n/i);
+                        }
                 }
         }
+
+        std::sort(res.begin(),res.end());
+
         return res;
 }
 
 // 素因数分解
-vector<pair<ll,ll>> prime_factorize(ll n){
-        vector<pair<ll,ll>> res;
+std::vector<std::pair<int64_t,int>> prime_factorize(int64_t n){
+        std::vector<std::pair<int64_t,int>> res;
 
-        for(ll i = 2;i*i <= n;++i){
-                if(n%i!=0){
+        for(int64_t i = 2;i * i <= n;++i){
+                if(n % i != 0){
                         continue;
                 }
 
                 int cnt=0;
 
-                while(n%i==0){
+                while(n % i == 0){
                         ++cnt;
-                        n/=i;
+                        n /=i ;
                 }
 
-                res.push_back(make_pair(i,cnt));
+                res.emplace_back(i,cnt);
         }
 
         if(n!=1){
-                res.push_back(make_pair(n,1));
+                res.emplace_back(n,1);
         }
 
         return res;
@@ -67,28 +77,9 @@ int ctoi(char c){
         return c-'0';
 }
 
-// 2つの配列の要素と要素の差で一番小さいものを返す
-// llvec x はソートされてる必要あり
-template<typename T> T min_diff(const vector<T> a,const vector<T> &x){
-        T num=INT_MAX/2;
-
-        for(auto&& v : a){
-                auto itr=lower_bound(all(x),v);
-
-                if(itr==x.begin()){
-                        num=min(num,(T)abs(v-*itr));
-                }else{
-                        num=min(num,(T)abs(v-*itr));
-                        --itr;
-                        num=min(num,(T)abs(v-*itr));
-                }
-        }
-
-        return num;
-}
-
 // 中央値
-template<typename T>T median(const vector<T> &v){
+template<typename T>
+T median(const vector<T> &v){
         T res;
         size_t cnt=v.size();
         if(cnt%2==0){
@@ -478,3 +469,6 @@ public:
                 }
         }
 };
+
+
+}
