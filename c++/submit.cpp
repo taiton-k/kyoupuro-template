@@ -367,8 +367,10 @@ private:
         size_t counter_;
 
 };
+inline FastStdOut<1024*1024> print;
 
 
+#ifdef LOCAL
 
 class FastStdErr : private FastOutput {
 
@@ -401,9 +403,13 @@ private:
         }
 
 };
-
-inline FastStdOut<1024*1024> print;
 inline FastStdErr debug;
+
+#else // #ifdef LOCAL
+
+constexpr inline void debug(...) noexcept {}
+
+#endif // #ifdef LOCAL
 
 
 
@@ -839,8 +845,17 @@ int main(void){
 }
 
 using namespace std;
-using namespace boost;
 using namespace taiton;
+#ifdef USE_BOOST
+using namespace boost;
+#endif
+#ifdef USE_ACL
+using namespace atcoder;
+#endif
+
+//#define int ll
+
+
 
 
 
