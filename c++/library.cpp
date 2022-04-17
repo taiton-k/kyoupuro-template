@@ -31,8 +31,8 @@ constexpr inline std::vector<T> enum_divisors(T n){
         std::vector<T> res;
 
         for(int64_t i = 1;i * i <= n;++i){
-                if(n % i==0){
-                        res.emplace_back(n/i);
+                if(n % i == 0){
+                        res.emplace_back(i);
 
                         if(i != n/i){
                                 res.emplace_back(n/i);
