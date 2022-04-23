@@ -1,153 +1,23 @@
 #include <bits/stdc++.h>
-using namespace std;
-using ll = int64_t;
+
 
 
 namespace taiton {
 
 
-// エラトステネスの篩
-inline std::vector<bool> sieve_of_eratosthenes(std::size_t n) noexcept {
-        std::vector<bool> sieve(n+1,true);
-
-        sieve[0] = sieve[1] = false;
-
-        for(std::size_t i = 2;i * i < n * n;i++){
-                if(sieve[i] == true){
-                        continue;
-                }
-
-                for(std::size_t j = 2;j * i < n;j++){
-                        sieve[j * i]=false;
-                }
-        }
-
-        return sieve;
-}
-
-// 約数列挙
-template<typename T>
-constexpr inline std::vector<T> enum_divisors(T n){
-        std::vector<T> res;
-
-        for(int64_t i = 1;i * i <= n;++i){
-                if(n % i == 0){
-                        res.emplace_back(i);
-
-                        if(i != n/i){
-                                res.emplace_back(n/i);
-                        }
-                }
-        }
-
-        std::sort(res.begin(),res.end());
-
-        return res;
-}
-
-// 素因数分解
-std::vector<std::pair<int64_t,int>> prime_factorize(int64_t n){
-        std::vector<std::pair<int64_t,int>> res;
-
-        for(int64_t i = 2;i * i <= n;++i){
-                if(n % i != 0){
-                        continue;
-                }
-
-                int cnt=0;
-
-                while(n % i == 0){
-                        ++cnt;
-                        n /=i ;
-                }
-
-                res.emplace_back(i,cnt);
-        }
-
-        if(n!=1){
-                res.emplace_back(n,1);
-        }
-
-        return res;
-}
-
-
 // Char to Int
-int ctoi(char c){
+constexpr inline int ctoi(char c) noexcept {
         return c-'0';
 }
 
-// 中央値
-template<typename T>
-T median(const vector<T> &v){
-        T res;
-        size_t cnt=v.size();
-        if(cnt%2==0){
-                res=(v.at(cnt/2-1)+v.at(cnt/2))/2;
-        }else{
-                res=v.at(cnt/2);
-        }
-
-        return res;
-}
-
-// Union-Find
-class UnionFind{
-        private :
-                vector<int> par,rank,cnt;
-                int siz;
-
-        public :
-                UnionFind(size_t n):par(n),rank(n),cnt(n,1),siz(n){
-                        for(int i=0;i < n;++i){
-                                par.at(i)=i;
-                        }
-                }
-
-                size_t root(size_t a){
-                        if(par.at(a)==a){
-                                return a;
-                        }else{
-                                par.at(a)=root(par.at(a));
-                                return par.at(a);
-                        }
-                }
-
-                bool same(size_t a,size_t b){
-                        return root(a)==root(b);
-                }
-
-                void unite(size_t a,size_t b){
-                        a=root(a);
-                        b=root(b);
-
-                        if(a!=b){
-                                if(rank.at(a) < rank.at(b))swap(a,b);
-
-                                par.at(b)=a;
-
-                                if(rank.at(a)==rank.at(b))++rank.at(a);
-
-                                cnt.at(a)+=cnt.at(b);
-
-                                --siz;
-                        }
-                }
-
-                int size(size_t a){
-                        return cnt.at(root(a));
-                }
-
-                int size(){
-                        return siz;
-                }
-};
 
 // にぶたん
 template<typename T,typename U>
-T nibutan(T left ,T right, U target, function<U(T)> func,
-                function<bool(T,T)> equal = [](T left, T right){return right-left == 1;},
-                function<bool(U,U)> compare = [](U res, U target){return res <= target;}){
+T nibutan(T left ,T right, U target,
+                std::function<U(T)> func,
+                std::function<bool(T,T)> equal = [](T left, T right){return right-left == 1;},
+                std::function<bool(U,U)> compare = [](U res, U target){return res <= target;}){
+
         T mid = (right+left)/2;
         U res = func(mid);
 
@@ -165,62 +35,20 @@ T nibutan(T left ,T right, U target, function<U(T)> func,
         return left;
 }
 
-// 累積和
-template<typename T>
-class ruisekiwa {
-        public :
-                ruisekiwa(vector<T>& a){
-                        v.resize(a.size()+1);
 
-                        for(int i=1;i < v.size();++i){
-                                v[i] = v[i-1]+a[i-1];
-                        }
-                }
-
-                template<typename U,class V>
-                ruisekiwa(vector<U>& a,V func){
-                        v.resize(a.size()+1);
-
-                        for(int i=1;i < v.size();++i){
-                                if(func(a[i-1])){
-                                        v[i]=v[i-1]+1;
-                                }else{
-                                        v[i]=v[i-1];
-                                }
-                        }
-                }
-
-                T range(size_t l,size_t r) const{
-                        return v[r]-v[l];
-                }
-
-        private :
-                vector<T> v;
-};
+using namespace std;
+using ll = std::int64_t;
 
 // ランレングス圧縮
-template<typename T>
-vector<pair<T,int>> run_length_encoding (const vector<T>& v){
-        vector<pair<T,int>> rle;
+template<class Container,typename T = typename Container::value_type>
+std::vector<std::pair<T,int>> run_length_encoding (const Container& a){
+        std::vector<std::pair<T,int>> rle;
 
-        for(int i=0;i < v.size();++i){
-                if((!rle.empty()) and rle.back().first == v[i]){
+        for(auto e : a){
+                if((!rle.empty()) and rle.back().first == e){
                         ++rle.back().second;
                 }else{
-                        rle.emplace_back(v[i],1);
-                }
-        }
-
-        return rle;
-}
-vector<pair<char,int>> run_length_encoding (const string& s){
-        vector<pair<char,int>> rle;
-
-        for(int i=0;i < static_cast<int>(s.size());++i){
-                if((!rle.empty()) and rle.back().first == s[i]){
-                        ++rle.back().second;
-                }else{
-                        rle.emplace_back(s[i],1);
+                        rle.emplace_back(e,1);
                 }
         }
 
@@ -228,13 +56,13 @@ vector<pair<char,int>> run_length_encoding (const string& s){
 }
 
 // 自作比較クラス
-template<typename T,size_t I>
+template<typename T,std::size_t I>
 struct greaterAt{
         bool operator () (T left,T right){
                 return left[I] < right[I];
         }
 };
-template<typename T,size_t I>
+template<typename T,std::size_t I>
 struct lessAt{
         bool operator () (T left,T right){
                 return left[I] > right[I];
@@ -277,14 +105,9 @@ vector<int> topological_sort(vector<vector<int>>& g){
         return res;
 }
 
-// Count digit
-template<typename T>
-int digitnum(const T a){
-        return log10(a)+1;
-}
-
 // return Longest Common Subsequence size
-int get_lcs_size(string& s,string& t){
+template<class Container>
+int get_lcs_size(const Container& s,const Container& t){
         int n = s.size();
         int m = t.size();
 
@@ -305,7 +128,8 @@ int get_lcs_size(string& s,string& t){
 }
 
 // return Longet Common Subsequence
-string get_lcs(string& s,string& t){
+template<class Container>
+Container get_lcs(const Container& s,const Container& t){
         int n = s.size();
         int m = t.size();
 
@@ -322,7 +146,7 @@ string get_lcs(string& s,string& t){
 
         }
 
-        string res;
+        Container res;
         for(int i=n,j=m;dp[i][j]!=0;){
                 if(dp[i-1][j] == dp[i][j-1]){
                         if(s[i-1] == t[j-1]){
@@ -425,7 +249,7 @@ public:
                 }
         }
 
-        inline Container data(){
+        inline Container& data(){
                 return data_;
         }
 
