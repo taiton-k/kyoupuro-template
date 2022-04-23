@@ -17,6 +17,15 @@ using namespace std;
 using namespace taiton;
 #ifdef USE_BOOST
 using namespace boost;
+#ifdef USE_BOOST_GRAPH
+using namespace boost::graph;
+#endif
+#ifdef USE_BOOST_GEOMETRY
+using namespace boost::geometry;
+#endif
+#ifdef USE_BOOST_MULTIPRECISION
+using namespace boost::multiprecision;
+#endif
 #endif
 #ifdef USE_ACL
 using namespace atcoder;
