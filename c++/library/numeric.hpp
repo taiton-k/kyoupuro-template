@@ -16,7 +16,7 @@ inline std::vector<bool> sieve_of_eratosthenes(std::size_t n) noexcept {
                         continue;
                 }
 
-                for(std::size_t j = 2;j * i < n;j++){
+                for(std::size_t j = 2;j * i <= n;j++){
                         sieve[j * i] = false;
                 }
         }
