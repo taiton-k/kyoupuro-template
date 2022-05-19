@@ -10,7 +10,7 @@
 
 [`submit.cpp`](c++/submit.cpp)は展開されたやつ。
 
-[`test.cpp`](c++/test.cpp)は実験とかするコードをかくためのもの。
+[`test.cpp`](c++/test.cpp)は実験とかするコードをかくためのもの。`main.cpp`と同じ内容。
 
 ### コンパイル
 
