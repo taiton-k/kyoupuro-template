@@ -24,3 +24,6 @@ all: clean $(OBJS) $(TARGET)
 
 clean:
 	-rm -f $(OBJS) $(TARGET) *.d
+
+test:
+	$(CC) $(CFLAGS) -I $(INCDIR) test.cpp
