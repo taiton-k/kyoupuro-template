@@ -4,15 +4,17 @@
 
 ## C++
 
-[`main.cpp`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/main.cpp)がメイン。
+[`main.cpp`](c++/main.cpp)がメイン。
 
-[`template.hpp`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/template.hpp)は提出時に展開される。
+[`template.hpp`](c++/template.hpp)は提出時に展開される。
 
-[`submit.cpp`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/submit.cpp)は展開されたやつ。
+[`submit.cpp`](c++/submit.cpp)は展開されたやつ。
+
+[`test.cpp`](c++/test.cpp)は実験とかするコードをかくためのもの。
 
 ### コンパイル
 
-[`Makefile`](https://github.com/taiton-k/kyoupuro-template/blob/main/c++/Makefile)を用意しているため、`make`だけでコンパイルできる。
+[`Makefile`](c++/Makefile)を用意しているため、`make`だけでコンパイルできる。
 
 コンパイルに[`zapcc`](https://github.com/yrnkrn/zapcc)を使ってるからコンパイルが高速！！！
 
