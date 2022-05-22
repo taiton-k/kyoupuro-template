@@ -658,6 +658,9 @@ template<typename T>
 using point2_t = boost::geometry::model::d2::point_xy<T>;
 
 template<class Point>
+using line_t = boost::geometry::model::linestring<Point>;
+
+template<class Point>
 using segment_t = boost::geometry::model::segment<Point>;
 
 template<class Point>
