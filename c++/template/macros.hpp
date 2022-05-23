@@ -10,3 +10,5 @@
 #define drep_2(i,a,n) for(int i=static_cast<int>(n);i < static_cast<int>(n);++i)
 #define drep(...) rep_overload(__VA_ARGS__,drep_2,drep_1,drep_0)(__VA_ARGS__) // 'd' means dynamic
 #define fore(p,arr) for(auto& p : arr)
+
+#define all(a) a.begin(),a.end()
