@@ -24,6 +24,153 @@
 
 
 
+#ifdef USE_BOOST
+#include <boost/range/algorithm.hpp>
+#include <boost/range/numeric.hpp>
+#include <boost/range/algorithm_ext.hpp>
+
+#ifdef USE_BOOST_GRAPH
+
+
+
+
+#include <boost/graph/directed_graph.hpp>
+#include <boost/graph/undirected_graph.hpp>
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/breadth_first_search.hpp>
+#include <boost/graph/bipartite.hpp>
+
+
+
+namespace taiton {
+
+
+template<class Graph>
+using vertex_t = typename boost::graph_traits<Graph>::vertex_descriptor;
+
+template<class Graph>
+using edge_t = typename boost::graph_traits<Graph>::edge_descriptor;
+
+
+template<class Graph>
+void get_distance(const Graph& g,std::vector<int>& dist,typename Graph::vertex_descriptor s = 0){
+        boost::breadth_first_search(g,s,boost::visitor(boost::make_bfs_visitor(boost::record_distances(dist.data(),boost::on_tree_edge{}))));
+}
+
+
+}
+
+#endif
+
+#ifdef USE_BOOST_GEOMETRY
+
+
+#include <boost/geometry.hpp>
+#if BOOST_VERSION < 107800
+#include <boost/geometry/algorithms/detail/azimuth.hpp>
+#endif //BOOST_VERSION < 107800
+
+
+
+namespace taiton{
+
+
+#if BOOST_VERSION < 107800
+template<class Point1,class Point2>
+inline long double azimuth(const Point1 &p1,const Point2 &p2){
+        return azimuth<long double>(p1,p2);
+}
+
+template<typename T>
+class point3_t : public boost::geometry::model::point<T,3,boost::geometry::cs::cartesian> {
+        using Base = boost::geometry::model::point<T,3,boost::geometry::cs::cartesian>;
+public:
+        using Base::Base;
+
+        constexpr inline T x() noexcept {
+                return this->template get<0>();
+        }
+
+        constexpr inline T y() noexcept {
+                return this->template get<1>();
+        }
+
+        constexpr inline T z() noexcept {
+                return this->template get<2>();
+        }
+};
+
+#else //BOOST_VERSION < 107800
+
+template<typename T>
+using point3_t = boost::geometry::model::d3::point_xyz<T>;
+
+#endif //BOOST_VERSION < 107800
+
+
+template<typename T>
+using point2_t = boost::geometry::model::d2::point_xy<T>;
+
+template<class Point>
+using line_t = boost::geometry::model::linestring<Point>;
+
+template<class Point>
+using segment_t = boost::geometry::model::segment<Point>;
+
+template<class Point>
+using box_t = boost::geometry::model::box<Point>;
+
+template<class Point>
+using polygon_t = boost::geometry::model::polygon<Point>;
+
+template<class Point>
+inline Point rotate(Point geo,double deg){
+        boost::geometry::transform(geo,geo,boost::geometry::strategy::transform::rotate_transformer<boost::geometry::degree,long double,2,2>{deg});
+        return geo;
+}
+
+template<class Point>
+inline Point rotate(Point geo,const Point& org,double deg){
+        geo.template set<0>(geo.template get<0>() - org.template get<0>());
+        geo.template set<1>(geo.template get<1>() - org.template get<1>());
+
+        geo = rotate(geo,deg);
+
+        geo.template set<0>(geo.template get<0>() + org.template get<0>());
+        geo.template set<1>(geo.template get<1>() + org.template get<1>());
+
+        return geo;
+}
+
+
+} // namespace taiton
+
+#endif
+
+#ifdef USE_BOOST_MULTIPRECISION
+
+
+#include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
+
+
+
+namespace taiton {
+
+
+namespace mp = boost::multiprecision;
+using cint = mp::cpp_int;
+using lfloat = mp::number<mp::cpp_dec_float<30>>;
+
+
+}
+
+#endif
+
+#endif
+
+
+
 #include <string>
 #include <array>
 #include <sstream>
@@ -149,6 +296,18 @@ private:
                 input(p.first);
                 input(p.second);
         }
+
+#ifdef USE_BOOST_GEOMETRY
+        template<typename T>
+        inline void input(point2_t<T>& p) noexcept {
+                T x,y;
+                input(x);
+                input(y);
+
+                p.x(x);
+                p.y(y);
+        }
+#endif
 
         template<typename T>
         inline void input(T& a) noexcept {
@@ -570,147 +729,6 @@ constexpr char lend = '\n';
 
 
 
-#ifdef USE_BOOST
-#include <boost/range/algorithm.hpp>
-#include <boost/range/numeric.hpp>
-#include <boost/range/algorithm_ext.hpp>
-
-#ifdef USE_BOOST_GRAPH
-
-
-
-
-#include <boost/graph/directed_graph.hpp>
-#include <boost/graph/undirected_graph.hpp>
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/breadth_first_search.hpp>
-#include <boost/graph/bipartite.hpp>
-
-
-
-namespace taiton {
-
-
-template<class Graph>
-using vertex_t = typename boost::graph_traits<Graph>::vertex_descriptor;
-
-template<class Graph>
-using edge_t = typename boost::graph_traits<Graph>::edge_descriptor;
-
-
-template<class Graph>
-void get_distance(const Graph& g,std::vector<int>& dist,typename Graph::vertex_descriptor s = 0){
-        boost::breadth_first_search(g,s,boost::visitor(boost::make_bfs_visitor(boost::record_distances(dist.data(),boost::on_tree_edge{}))));
-}
-
-
-}
-
-#endif
-
-#ifdef USE_BOOST_GEOMETRY
-
-
-#include <boost/geometry.hpp>
-#if BOOST_VERSION < 107800
-#include <boost/geometry/algorithms/detail/azimuth.hpp>
-#endif //BOOST_VERSION < 107800
-
-
-
-namespace taiton{
-
-
-#if BOOST_VERSION < 107800
-template<class Point1,class Point2>
-inline long double azimuth(const Point1 &p1,const Point2 &p2){
-        return azimuth<long double>(p1,p2);
-}
-
-template<typename T>
-class point3_t : public boost::geometry::model::point<T,3,boost::geometry::cs::cartesian> {
-        using Base = boost::geometry::model::point<T,3,boost::geometry::cs::cartesian>;
-public:
-        using Base::Base;
-
-        constexpr inline T x() noexcept {
-                return this->template get<0>();
-        }
-
-        constexpr inline T y() noexcept {
-                return this->template get<1>();
-        }
-
-        constexpr inline T z() noexcept {
-                return this->template get<2>();
-        }
-};
-
-#else //BOOST_VERSION < 107800
-
-template<typename T>
-using point3_t = boost::geometry::model::d3::point_xyz<T>;
-
-#endif //BOOST_VERSION < 107800
-
-
-template<typename T>
-using point2_t = boost::geometry::model::d2::point_xy<T>;
-
-template<class Point>
-using line_t = boost::geometry::model::linestring<Point>;
-
-template<class Point>
-using segment_t = boost::geometry::model::segment<Point>;
-
-template<class Point>
-inline Point rotate(Point geo,double deg){
-        boost::geometry::transform(geo,geo,boost::geometry::strategy::transform::rotate_transformer<boost::geometry::degree,long double,2,2>{deg});
-        return geo;
-}
-
-template<class Point>
-inline Point rotate(Point geo,const Point& org,double deg){
-        geo.template set<0>(geo.template get<0>() - org.template get<0>());
-        geo.template set<1>(geo.template get<1>() - org.template get<1>());
-
-        geo = rotate(geo,deg);
-
-        geo.template set<0>(geo.template get<0>() + org.template get<0>());
-        geo.template set<1>(geo.template get<1>() + org.template get<1>());
-
-        return geo;
-}
-
-
-} // namespace taiton
-
-#endif
-
-#ifdef USE_BOOST_MULTIPRECISION
-
-
-#include <boost/multiprecision/cpp_int.hpp>
-#include <boost/multiprecision/cpp_dec_float.hpp>
-
-
-
-namespace taiton {
-
-
-namespace mp = boost::multiprecision;
-using cint = mp::cpp_int;
-using lfloat = mp::number<mp::cpp_dec_float<30>>;
-
-
-}
-
-#endif
-
-#endif
-
-
-
 #include <vector>
 #include <string>
 #include <set>
@@ -836,6 +854,8 @@ using mi2vec = vec<mint2>;
 #define drep_2(i,a,n) for(int i=static_cast<int>(n);i < static_cast<int>(n);++i)
 #define drep(...) rep_overload(__VA_ARGS__,drep_2,drep_1,drep_0)(__VA_ARGS__) // 'd' means dynamic
 #define fore(p,arr) for(auto& p : arr)
+
+#define all(a) a.begin(),a.end()
 
 
 
