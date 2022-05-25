@@ -13,12 +13,12 @@
 #include <atcoder/all>
 #endif
 
+#include "template/use_boost.hpp"
 #include "template/fast_input.hpp"
 #include "template/fast_output.hpp"
 #include "template/utilities.hpp"
-#include "template/use_boost.hpp"
 #include "template/type_alias.hpp"
-#include "template/rep_macros.hpp"
+#include "template/macros.hpp"
 
 
 
