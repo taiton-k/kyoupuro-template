@@ -76,6 +76,18 @@ private:
                 input(p.second);
         }
 
+#ifdef USE_BOOST_GEOMETRY
+        template<typename T>
+        inline void input(point2_t<T>& p) noexcept {
+                T x,y;
+                input(x);
+                input(y);
+
+                p.x(x);
+                p.y(y);
+        }
+#endif
+
         template<typename T>
         inline void input(T& a) noexcept {
                 if constexpr (std::is_integral_v<T>) {
