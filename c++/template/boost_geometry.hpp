@@ -53,6 +53,9 @@ template<class Point>
 using segment_t = boost::geometry::model::segment<Point>;
 
 template<class Point>
+using box_t = boost::geometry::model::box<Point>;
+
+template<class Point>
 using polygon_t = boost::geometry::model::polygon<Point>;
 
 template<class Point>
