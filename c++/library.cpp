@@ -12,35 +12,28 @@ constexpr inline int ctoi(char c) noexcept {
 
 
 // にぶたん
-template<typename T,typename U,class Func,class Equal,class Compare>
-T nibutan(T left ,T right, U target,
-                Func func,
-                Equal equal = [](T left, T right){return right-left == 1;},
-                Compare compare = [](U res, U target){return res <= target;}){
-        if constexpr (
-                !std::is_invocable_v<Func,T> or
-                !std::is_invocable_r_v<bool,Equal,T,T> or
-                !std::is_invocable_r_v<bool,Compare,U,U>)
-        {
-                static_assert([]{return false;},"nibutan!!!!!Failed!!!");
-        }
+template<typename T>
+T nibutan (
+        T ok,
+        T ng,
+        std::function<bool(T)> func,
+        std::function<bool(T,T)> equal = [](T ok, T ng){return std::abs(ok-ng) == 1;}
+) {
+        while (!equal(ok,ng)) {
 
-        T mid = (right+left)/2;
-        U res = func(mid);
+                T mid = (ok+ng)/2;
 
-        while(!equal(left,right)){
-                if(compare(res,target)){
-                        left = mid;
+                if (func(mid)) {
+                        ok = mid;
                 }else{
-                        right = mid;
+                        ng = mid;
                 }
 
-                mid = (right+left)/2;
-                res = func(mid);
         }
 
-        return left;
+        return ok;
 }
+
 
 
 using namespace std;
