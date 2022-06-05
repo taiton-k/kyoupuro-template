@@ -607,6 +607,10 @@ constexpr inline bool operator >= (const atcoder::static_modint<M>& a,const atco
 }
 #endif
 
+constexpr int ctoi (char c) noexcept {
+        return c - '0';
+}
+
 template<typename T>
 constexpr inline int ilog10(T x) noexcept {
         int res = 0;
@@ -718,6 +722,23 @@ constexpr inline To cast(From&& a) noexcept {
 inline void yorn(bool flag) noexcept {
         print(flag ? "Yes" : "No",'\n');
 }
+
+struct {
+        template<typename T>
+        constexpr operator T () {
+                return std::numeric_limits<T>::min();
+        }
+} minusInf;
+
+struct {
+        template<typename T>
+        constexpr operator T () {
+                return std::numeric_limits<T>::max();
+        }
+        auto operator - () {
+                return minusInf;
+        }
+} inf;
 
 
 constexpr char spc = ' ';
