@@ -14,6 +14,6 @@
 
 
 
-void solve(void){
+void solve () {
 
 }
