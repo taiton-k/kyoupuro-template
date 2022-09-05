@@ -21,6 +21,7 @@ public:
 
         Solver () {
 
+                solve();
         }
 
         ~Solver () {
@@ -28,6 +29,10 @@ public:
         }
 
 private:
+
+        void solve () {
+
+        }
 
 };
 
