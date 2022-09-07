@@ -723,14 +723,14 @@ inline void yorn(bool flag) noexcept {
         print(flag ? "Yes" : "No",'\n');
 }
 
-struct {
+inline struct {
         template<typename T>
         constexpr operator T () {
                 return std::numeric_limits<T>::min();
         }
 } minusInf;
 
-struct {
+inline struct {
         template<typename T>
         constexpr operator T () {
                 return std::numeric_limits<T>::max();
