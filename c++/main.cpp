@@ -1,10 +1,6 @@
 // メイン部分(solve関数)は一番下
 // https://github.com/taiton-k/kyoupuro-template
 
-#include "template/fast_input.hpp"
-#include "template/fast_output.hpp"
-#include <algorithm>
-#include <unordered_map>
 #define USE_ACL
 #define USE_BOOST
 //#define USE_BOOST_GRAPH
@@ -20,20 +16,16 @@ class Solver {
 public:
 
         Solver () {
-
                 solve();
         }
 
         ~Solver () {
-
         }
 
 private:
 
         void solve () {
-
         }
-
 };
 
 
